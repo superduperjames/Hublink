@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -73,10 +71,6 @@
       cursor: pointer;
     }
 
-    .continue-btn:hover {
-      opacity: 0.9;
-    }
-
     .button-group {
       margin-top: 30px;
       display: none;
@@ -89,9 +83,9 @@
 
     .action-buttons {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     .action-buttons button {
@@ -111,16 +105,10 @@
     .action-buttons button:nth-child(1) { animation-delay: 0.05s; }
     .action-buttons button:nth-child(2) { animation-delay: 0.15s; }
     .action-buttons button:nth-child(3) { animation-delay: 0.25s; }
-    .action-buttons button:nth-child(4) { animation-delay: 0.35s; }
 
     .action-buttons button:hover {
       transform: translateY(-4px) scale(1.03);
       background: #2d3748;
-    }
-
-    .action-buttons button:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
     }
 
     /* Modal */
@@ -140,7 +128,6 @@
       padding: 20px;
       border-radius: 16px;
       max-width: 90%;
-      max-height: 90%;
       text-align: center;
       transform: scale(0.92);
       opacity: 0;
@@ -159,11 +146,6 @@
       color: #1a202c;
     }
 
-    .fallback {
-      color: #a00;
-      font-size: 18px;
-    }
-
     .close {
       margin-top: 14px;
       font-size: 14px;
@@ -173,10 +155,7 @@
     }
 
     @keyframes buttonIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes fadeIn {
@@ -185,10 +164,7 @@
     }
 
     @keyframes popIn {
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
+      to { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
@@ -197,11 +173,11 @@
 
 <div class="card">
 
-  <img src="https://res.cloudinary.com/eventmobi/image/upload/v1767906458/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Screenshot_2026-01-09_at_5.07.21_AM.png" class="hero-image" alt="Main Image">
+  <img src="https://res.cloudinary.com/eventmobi/image/upload/v1767906458/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Screenshot_2026-01-09_at_5.07.21_AM.png" class="hero-image">
 
   <div class="downloads">
-    <a href="https://res.cloudinary.com/eventmobi/image/upload/v1767906347/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Daily_Tracking_-_Sheet7.pdf" download>PDF</a>
-    <a href="https://res.cloudinary.com/eventmobi/raw/upload/v1767906541/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Expenses.xlsx" download>XLS</a>
+    <a href="files/sample.pdf" download>PDF</a>
+    <a href="files/sample.xlsx" download>XLS</a>
   </div>
 
   <div class="name-box">
@@ -214,15 +190,9 @@
     <div class="welcome" id="welcomeText"></div>
 
     <div class="action-buttons">
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'Pay James Here!')">
-        Pay James Here!
-      </button>
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'Pay Nikki Here!')">
-        Pay Nikki Here!
-      </button>
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'Pay AJ Here!')">
-        Pay AJ Here!
-      </button>
+      <button onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option1')">Option One</button>
+      <button onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option2')">Option Two</button>
+      <button onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option3')">Option Three</button>
     </div>
   </div>
 
@@ -231,14 +201,16 @@
 <!-- Modal -->
 <div class="modal" id="modal" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
-    <img id="modalImage" src="">
+    <img id="modalImage">
     <div id="amountText" class="amount"></div>
     <div class="close" onclick="closeModal()">Close</div>
   </div>
 </div>
 
 <script>
-  /* ========= EDIT THIS SECTION ONLY ========= */
+  /* ========= EDIT THESE TWO SECTIONS ========= */
+
+  // Personalized amounts (max 9 names)
   const nameData = {
     "James": {
       option1: "₱12,500",
@@ -255,8 +227,15 @@
       option2: "₱6,500",
       option3: "₱2,800"
     }
-    // add up to 9 names total
   };
+
+  // Default amounts for unknown names
+  const defaultAmounts = {
+    option1: "ERROR",
+    option2: "ERROR",
+    option3: "ERROR"
+  };
+
   /* ========================================= */
 
   let currentUser = "";
@@ -264,38 +243,25 @@
 
   function unlock() {
     const input = document.getElementById("username").value.trim().toLowerCase();
-    if (!input) {
-      alert("Please enter your name.");
-      return;
-    }
+    if (!input) return alert("Please enter your name.");
 
     currentUser = input;
     isKnownUser = !!nameData[input];
 
     document.getElementById("welcomeText").textContent =
-      "Welcome, " + capitalize(input);
+      "Welcome, " + input.charAt(0).toUpperCase() + input.slice(1);
 
-    const group = document.getElementById("buttonGroup");
-    group.style.display = "block";
-
-    group.querySelectorAll("button").forEach(btn => {
-      btn.disabled = false;
-    });
+    document.getElementById("buttonGroup").style.display = "block";
   }
 
   function openModal(imageSrc, optionKey) {
     document.getElementById("modalImage").src = imageSrc;
 
-    const amountEl = document.getElementById("amountText");
+    const amount = isKnownUser
+      ? nameData[currentUser][optionKey]
+      : defaultAmounts[optionKey];
 
-    if (isKnownUser) {
-      amountEl.textContent = nameData[currentUser][optionKey];
-      amountEl.classList.remove("fallback");
-    } else {
-      amountEl.textContent = "Contact admin";
-      amountEl.classList.add("fallback");
-    }
-
+    document.getElementById("amountText").textContent = amount;
     document.getElementById("modal").style.display = "flex";
   }
 
@@ -303,10 +269,6 @@
     document.getElementById("modal").style.display = "none";
     document.getElementById("modalImage").src = "";
     document.getElementById("amountText").textContent = "";
-  }
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 </script>
 
