@@ -2,122 +2,177 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Interactive Image Page</title>
+  <title>Interactive Microsite</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      background: #f4f4f4;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f2f4f8, #e6e9f0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #ffffff;
+      width: 92%;
+      max-width: 720px;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.12);
       text-align: center;
     }
 
-    .container {
-      padding: 30px;
+    .hero-image {
+      width: 100%;
+      border-radius: 14px;
+      margin-bottom: 20px;
     }
 
-    .main-image {
-      max-width: 90%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      margin-bottom: 20px;
+    .downloads {
+      margin-bottom: 28px;
     }
 
     .downloads a {
       margin: 0 10px;
+      font-size: 14px;
       text-decoration: none;
-      font-weight: bold;
-      color: #0066cc;
+      font-weight: 600;
+      color: #5a67d8;
     }
 
-    .name-box {
-      margin-top: 30px;
+    .name-box p {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #444;
     }
 
     input {
-      padding: 10px;
-      font-size: 16px;
       width: 220px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
     }
 
-    button {
-      padding: 10px 16px;
+    .continue-btn {
+      margin-left: 8px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: #fff;
       font-size: 15px;
       cursor: pointer;
-      border: none;
-      border-radius: 6px;
-      background: #222;
-      color: white;
-      margin: 6px;
-      transition: transform 0.15s ease, opacity 0.15s ease;
     }
 
-    button:hover:enabled {
-      transform: translateY(-1px);
+    .continue-btn:hover {
       opacity: 0.9;
     }
 
-    button:disabled {
-      opacity: 0.4;
+    .button-group {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .welcome {
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .action-buttons button {
+      min-width: 140px;
+      padding: 14px 18px;
+      font-size: 15px;
+      border-radius: 10px;
+      border: none;
+      background: #1a202c;
+      color: white;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: buttonIn 0.5s ease forwards;
+    }
+
+    .action-buttons button:nth-child(1) { animation-delay: 0.05s; }
+    .action-buttons button:nth-child(2) { animation-delay: 0.15s; }
+    .action-buttons button:nth-child(3) { animation-delay: 0.25s; }
+    .action-buttons button:nth-child(4) { animation-delay: 0.35s; }
+
+    .action-buttons button:hover {
+      transform: translateY(-4px) scale(1.03);
+      background: #2d3748;
+    }
+
+    .action-buttons button:disabled {
+      opacity: 0.3;
       cursor: not-allowed;
     }
 
-    .button-group {
-      display: none;
-      margin-top: 25px;
-    }
-
-    /* Modal overlay */
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.65);
       align-items: center;
       justify-content: center;
       z-index: 1000;
       animation: fadeIn 0.3s ease forwards;
     }
 
-    /* Modal box */
     .modal-content {
       background: white;
-      padding: 15px;
-      border-radius: 14px;
+      padding: 18px;
+      border-radius: 16px;
       max-width: 90%;
       max-height: 90%;
-      transform: scale(0.9);
+      transform: scale(0.92);
       opacity: 0;
       animation: popIn 0.35s ease forwards;
     }
 
     .modal-content img {
       max-width: 100%;
-      height: auto;
-      border-radius: 8px;
+      border-radius: 10px;
     }
 
     .close {
-      display: inline-block;
       margin-top: 12px;
-      color: #444;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      font-weight: bold;
+      color: #555;
     }
 
     /* Animations */
+    @keyframes buttonIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
     @keyframes popIn {
-      from {
-        transform: scale(0.9);
-        opacity: 0;
-      }
       to {
         transform: scale(1);
         opacity: 1;
@@ -128,30 +183,28 @@
 
 <body>
 
-<div class="container">
+<div class="card">
 
-  <!-- Main Image -->
-  <img src="images/main-image.jpg" alt="Main Image" class="main-image">
+  <img src="images/main-image.jpg" class="hero-image" alt="Main Image">
 
-  <!-- Download links -->
   <div class="downloads">
-    <a href="files/sample.pdf" download>Download PDF</a>
-    <a href="files/sample.xlsx" download>Download XLS</a>
+    <a href="files/sample.pdf" download>PDF</a>
+    <a href="files/sample.xlsx" download>XLS</a>
   </div>
 
-  <!-- Name Input -->
   <div class="name-box">
-    <p>Please enter your name:</p>
-    <input type="text" id="username" placeholder="Your name" />
-    <button onclick="unlockButtons()">Continue</button>
+    <p>Enter your name to continue</p>
+    <input type="text" id="username" placeholder="Your name">
+    <button class="continue-btn" onclick="unlock()">Continue</button>
   </div>
 
-  <!-- Buttons (locked by default) -->
   <div class="button-group" id="buttonGroup">
-    <p id="welcomeText"></p>
-    <button disabled onclick="openModal('images/popup1.jpg')">Button 1</button>
-    <button disabled onclick="openModal('images/popup2.jpg')">Button 2</button>
-    <button disabled onclick="openModal('images/popup3.jpg')">Button 3</button>
+    <div class="welcome" id="welcomeText"></div>
+    <div class="action-buttons">
+      <button disabled onclick="openModal('images/popup1.jpg')">Option One</button>
+      <button disabled onclick="openModal('images/popup2.jpg')">Option Two</button>
+      <button disabled onclick="openModal('images/popup3.jpg')">Option Three</button>
+    </div>
   </div>
 
 </div>
@@ -159,38 +212,34 @@
 <!-- Modal -->
 <div class="modal" id="modal" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
-    <img id="modalImage" src="" alt="Popup Image">
+    <img id="modalImage" src="">
     <div class="close" onclick="closeModal()">Close</div>
   </div>
 </div>
 
 <script>
-  function unlockButtons() {
+  function unlock() {
     const name = document.getElementById("username").value.trim();
-    if (!name) {
-      alert("Please enter your name.");
-      return;
-    }
+    if (!name) return alert("Please enter your name.");
 
     document.getElementById("welcomeText").textContent =
-      "Welcome, " + name + "!";
+      "Welcome, " + name;
 
     const group = document.getElementById("buttonGroup");
     group.style.display = "block";
 
-    const buttons = group.querySelectorAll("button");
-    buttons.forEach(btn => btn.disabled = false);
+    group.querySelectorAll("button").forEach(btn => {
+      btn.disabled = false;
+    });
   }
 
-  function openModal(imageSrc) {
-    const modal = document.getElementById("modal");
-    document.getElementById("modalImage").src = imageSrc;
-    modal.style.display = "flex";
+  function openModal(src) {
+    document.getElementById("modalImage").src = src;
+    document.getElementById("modal").style.display = "flex";
   }
 
   function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none";
+    document.getElementById("modal").style.display = "none";
     document.getElementById("modalImage").src = "";
   }
 </script>
