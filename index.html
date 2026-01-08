@@ -227,7 +227,7 @@
     <a href="https://res.cloudinary.com/eventmobi/raw/upload/v1767906541/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Expenses.xlsx" download>Download as XLS File</a>
   </div>
 
-  <div class="name-box">
+  <div class="name-box" id="nameBox">
     <p>Enter your name to continue</p>
     <input type="text" id="username" placeholder="Your name">
     <button class="continue-btn" onclick="unlock()">Continue</button>
@@ -284,27 +284,29 @@
     const input = sanitize(raw);
 
     if (!input) {
-      alert("Please enter your name.");
+      alert("Please enter your name!");
       return;
     }
 
     if (!nameData[input]) {
-      alert("Name not recognized.");
+      alert("Name not recognized!");
       return;
     }
 
     currentUser = input;
 
-    document.getElementById("welcomeText").textContent =
-      "Welcome " + raw.trim() + "!";
+    document.getElementById("nameBox").style.display = "none";
 
-    const group = document.getElementById("buttonGroup");
-    group.style.display = "block";
+  document.getElementById("welcomeText").textContent =
+    "Welcome " + raw.trim() + "!";
 
-    group.querySelectorAll("button").forEach(btn => {
-      btn.disabled = false;
-    });
-  }
+  const group = document.getElementById("buttonGroup");
+  group.style.display = "block";
+
+  group.querySelectorAll("button").forEach(btn => {
+    btn.disabled = false;
+  });
+}
 
   function openModal(imageSrc, optionKey) {
     document.getElementById("modalImage").src = imageSrc;
