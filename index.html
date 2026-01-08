@@ -308,13 +308,15 @@
   });
 }
 
-  function openModal(imageSrc, optionKey) {
-    document.getElementById("modalImage").src = imageSrc;
-    document.getElementById("amountText").textContent =
-      nameData[currentUser][optionKey];
+function openModal(imageSrc, optionKey) {
+  document.getElementById("modalImage").src = imageSrc;
 
-    document.getElementById("modal").style.display = "flex";
-  }
+  // Format the amount with Peso sign and optional "Amount:" text
+  const amount = nameData[currentUser][optionKey];
+  document.getElementById("amountText").textContent = "Amount: ₱" + amount;
+
+  document.getElementById("modal").style.display = "flex";
+}
 
   function closeModal() {
     document.getElementById("modal").style.display = "none";
