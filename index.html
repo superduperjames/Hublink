@@ -9,24 +9,25 @@
     * { box-sizing: border-box; }
 
     body {
-      margin-top:10%;
-      margin-bottom:10%;
+      margin: 0;
+      padding: 24px;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: url('https://res.cloudinary.com/eventmobi/image/upload/v1767909276/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/BG.png') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
       display: flex;
-      align-items: center;
       justify-content: center;
     }
 
+    /* Bento Box Grid Layout */
     .card-stack {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
       width: 100%;
+      max-width: 1200px;
+      justify-items: center;
     }
 
     .card-title {
@@ -39,7 +40,7 @@
 
     .card {
       background: #ffffff;
-      width: 92%;
+      width: 100%;
       max-width: 720px;
       padding: 32px;
       border-radius: 20px;
@@ -69,7 +70,7 @@
       text-decoration: none;
       font-weight: 600;
       color: #5a67d8;
-      text-decoration:underline;
+      text-decoration: underline;
     }
 
     .name-box p {
@@ -161,64 +162,87 @@
       background: #2d3748;
     }
 
-    /* Second card / package styles */
-    .package-row {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      margin-top:5%;
+    /* Second card / package styles - updated for bento layout */
+.package-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 5%;
+  justify-content: flex-start; /* aligns content to left for bento style */
+}
+
+.package-image {
+  width: 160px;        /* smaller image */
+  height: 120px;       /* smaller height */
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.package-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.package-content {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.current-month-holder {
+  font-size: 16px;  /* slightly smaller */
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.current-month-holder .highlight-month {
+  color: #5a67d8;
+  font-weight: 700;
+}
+
+.month-holder-name {
+  font-size: 28px; /* slightly smaller */
+  font-weight: 700;
+  color: #1a202c;
+  margin-top: 8px;
+}
+
+    .faq-btn {
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      background: #5a67d8;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+      transition: transform 0.2s ease;
     }
 
-    .package-image {
-      width: 220px;
-      height: 140px;
-      border-radius: 14px;
-      overflow: hidden;
-      flex-shrink: 0;
+    .faq-btn:hover {
+      transform: scale(1.03);
+      background: #434190;
     }
 
-    .package-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+@media (max-width: 640px) {
+  .package-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .package-image {
+    width: 100%;
+    height: 160px;
+  }
+  .package-content {
+    text-align: center;
+  }
+}
 
-    .package-content {
-      font-size: 14px;
-      line-height: 1.5;
-      flex: 1;
-    }
-
-    .current-month-holder {
-      font-size: 20px;
-      margin-bottom: 8px;
-      color: #333;
-      text-align: center;
-    }
-
-    .current-month-holder .highlight-month {
-      color: #5a67d8;
-      font-weight: bolder;
-    }
-
-    .month-holder-name {
-      font-size: 35px;
-      font-weight: 700;
-      color: #1a202c;
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    @media (max-width: 640px) {
-      .package-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .package-image img {
-        width: 100%;
-        height: 160px;
-      }
-    }
 
     /* Modal styles */
     .modal {
@@ -302,13 +326,13 @@
     @keyframes popIn {
       to { transform: scale(1); opacity: 1; }
     }
+
   </style>
 </head>
 
 <body>
 
 <div class="card-stack">
-
   <!-- First Card: Payment Gateway -->
   <div class="card">
     <div class="card-title">Interactive Payment Gateway</div>
@@ -359,26 +383,21 @@
         <div class="current-month-holder">
           Our Title Holder for the month of <span id="currentMonth" class="highlight-month"></span> is:
         </div>
-        <div class="month-holder-name" id="monthHolderName">
-          <!-- Name dynamically populated -->
-        </div>
+        <div class="month-holder-name" id="monthHolderName"></div>
         <div style="margin-top:16px;">
-  <button class="faq-btn" onclick="openFAQModal()">Click here for the package mechanics and FAQs</button>
-</div>
+          <button class="faq-btn" onclick="openFAQModal()">Click here for the package mechanics and FAQs</button>
+        </div>
       </div>
     </div>
   </div>
 
-  
   <!-- Third Card: Wedding Checklist -->
   <div class="card">
     <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
-
     <div class="package-content" style="text-align:center;">
       (Coming soon)
     </div>
   </div>
-
 </div>
 
 <!-- Existing Modal -->
@@ -389,7 +408,7 @@
     <div class="close" onclick="closeModal()">Close</div>
   </div>
 </div>
-  
+
 <!-- FAQ Modal for second card -->
 <div class="modal" id="faqModal" onclick="closeFAQModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
@@ -397,7 +416,7 @@
     <div class="close" onclick="closeFAQModal()">Close</div>
   </div>
 </div>
-  
+
 <!-- Fullscreen Image -->
 <div class="fullscreen" id="fullscreen" onclick="closeFullscreen()">
   <div class="fullscreen-close" onclick="closeFullscreen()">×</div>
@@ -405,7 +424,7 @@
 </div>
 
 <script>
-  // Original Payment Gateway logic
+  // Payment Gateway logic
   const nameData = {
     james:  { option1: 0, option2: 0, option3: 0, option4: 0, option5: 0 },
     allen:  { option1: 532, option2: 719, option3: 324, option4: 100, option5: 115 },
@@ -449,27 +468,23 @@
     document.getElementById("resetUser").style.display = "none";
     document.getElementById("nameBox").style.display = "block";
   }
-  
-function openFAQModal() {
-  const faq = document.getElementById("faqModal");
-  const content = faq.querySelector(".modal-content");
-  faq.style.display = "flex";
 
-  // Reset transform & opacity for animation
-  content.style.transform = "scale(0.92)";
-  content.style.opacity = "0";
+  function openFAQModal() {
+    const faq = document.getElementById("faqModal");
+    const content = faq.querySelector(".modal-content");
+    faq.style.display = "flex";
+    content.style.transform = "scale(0.92)";
+    content.style.opacity = "0";
+    setTimeout(() => {
+      content.style.transform = "scale(1)";
+      content.style.opacity = "1";
+    }, 10);
+  }
 
-  // Trigger the popIn animation
-  setTimeout(() => {
-    content.style.transform = "scale(1)";
-    content.style.opacity = "1";
-  }, 10);
-}
-
-function closeFAQModal() {
-  const faq = document.getElementById("faqModal");
-  faq.style.display = "none";
-}
+  function closeFAQModal() {
+    const faq = document.getElementById("faqModal");
+    faq.style.display = "none";
+  }
 
   function openModal(imageSrc, optionKey) {
     document.getElementById("modalImage").src = imageSrc;
