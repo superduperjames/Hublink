@@ -9,8 +9,7 @@
     * { box-sizing: border-box; }
 
     body {
-      margin-top: 10%;
-      margin-bottom:10%;
+      margin: 0;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: url('https://res.cloudinary.com/eventmobi/image/upload/v1767909276/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/BG.png') no-repeat center center fixed;
@@ -30,7 +29,7 @@
     }
 
     .card-title {
-      font-size: 30px;
+      font-size: 18px;
       font-weight: 700;
       color: #1a202c;
       margin-bottom: 18px;
@@ -103,10 +102,25 @@
     }
 
     .welcome {
-      font-size: 23px;
+      font-size: 18px;
       margin-bottom: 18px;
       font-weight: 600;
       color: #1a202c;
+    }
+
+    .reset-user {
+      margin-top: -8px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+
+    .reset-user span {
+      color: #5a67d8;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 600;
     }
 
     .action-buttons {
@@ -146,29 +160,17 @@
       background: #2d3748;
     }
 
-    .secondary-card {
-      background: #ffffff;
-      width: 92%;
-      max-width: 720px;
-      padding: 24px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      color: #1a202c;
-    }
-
+    /* Second card / package styles */
     .package-row {
       display: flex;
       gap: 20px;
       align-items: center;
-      margin-bottom:10%;
     }
 
     .package-image {
       width: 220px;
       height: 140px;
+      border-radius: 14px;
       overflow: hidden;
       flex-shrink: 0;
     }
@@ -182,6 +184,27 @@
     .package-content {
       font-size: 14px;
       line-height: 1.5;
+      flex: 1;
+    }
+
+    .current-month-holder {
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #333;
+      text-align: left;
+    }
+
+    .current-month-holder .highlight-month {
+      color: #5a67d8;
+      font-weight: 600;
+    }
+
+    .month-holder-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-top: 12px;
+      text-align: center;
     }
 
     @media (max-width: 640px) {
@@ -189,13 +212,13 @@
         flex-direction: column;
         align-items: stretch;
       }
-
-      .package-image {
+      .package-image img {
         width: 100%;
         height: 160px;
       }
     }
 
+    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -265,28 +288,6 @@
       font-weight: 600;
     }
 
-    .reset-user {
-      margin-top: -8px;
-      margin-bottom: 16px;
-      font-size: 8px;
-      color: #666;
-      text-align: center;
-}
-
-.reset-user span {
-      color: #5a67d8;
-      cursor: pointer;
-      text-decoration: underline;
-      font-weight: 600;
-}
-
-.package-title{
-      font-size: 30px;
-      font-weight: 700;
-      color: #1a202c;
-      margin-bottom: 18px;
-      text-align: center;
-    }
     @keyframes buttonIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -299,61 +300,6 @@
     @keyframes popIn {
       to { transform: scale(1); opacity: 1; }
     }
-    
-.current-month-holder {
-  font-size: 17px;
-  margin-bottom: 8px;
-  color: #333;
-  text-align: left;
-}
-
-.current-month-holder .highlight-month {
-  color: #5a67d8; /* different color for the month */
-  font-weight: 600;
-}
-    .month-title-holder {
-  font-size: 13px;
-  margin-bottom: 8px;
-  color: #333;
-  text-align: left;
-}
-
-.month-title-holder .highlight-month {
-  color: #5a67d8; /* Month in different color */
-  font-weight: 600;
-}
-
-.month-holder-name {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1a202c;
-  margin-top: 12px;
-  text-align: center;
-}
-
-.package-row {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.package-image img {
-  width: 220px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-@media (max-width: 640px) {
-  .package-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .package-image img {
-    width: 100%;
-    height: 160px;
-  }
-}
   </style>
 </head>
 
@@ -361,6 +307,7 @@
 
 <div class="card-stack">
 
+  <!-- First Card: Payment Gateway -->
   <div class="card">
     <div class="card-title">Interactive Payment Gateway</div>
 
@@ -383,12 +330,10 @@
 
     <div class="button-group" id="buttonGroup">
       <div class="welcome" id="welcomeText"></div>
-
       <div class="reset-user" id="resetUser" style="display:none;">
-  Not you?
-  <span onclick="resetUser()">Click here to go back</span>
-</div>
-      
+        Not you? <span onclick="resetUser()">Click here to go back</span>
+      </div>
+
       <div class="action-buttons">
         <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910366/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/JAMES.png', 'option1')">Pay James Here!</button>
         <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/NIKKI.png', 'option2')">Pay Nikki Here!</button>
@@ -399,32 +344,35 @@
     </div>
   </div>
 
+  <!-- Second Card: Health + Wellness -->
   <div class="card">
-  <div class="card-title">Health + Wellness Package</div>
-<div class="package-row">
-  <div class="package-image" id="monthImageContainer">
-    <img id="monthImage" src="" alt="">
-  </div>
+    <div class="card-title">Health + Wellness Package</div>
 
-  <div class="package-content" style="text-align:center;">
-    <div class="month-title-holder">
-      Our Title Holder for the month of <span id="currentMonth" class="highlight-month"></span> is:
+    <div class="package-row">
+      <div class="package-image" id="monthImageContainer">
+        <img id="monthImage" src="" alt="">
+      </div>
+
+      <div class="package-content">
+        <div class="current-month-holder">
+          Our Title Holder for the month of <span id="currentMonth" class="highlight-month"></span> is:
+        </div>
+        <div class="month-holder-name" id="monthHolderName">
+          <!-- Name dynamically populated -->
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="month-holder-name" id="monthHolderName">
-      <!-- Name will be inserted here dynamically -->
+  <!-- Third Card: Wedding Checklist -->
+  <div class="card">
+    <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
+
+    <div class="package-content" style="text-align:center;">
+      (Coming soon)
     </div>
   </div>
-</div>
 
-  
-
-<div class="card">
-  <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
-
-  <div class="package-content" style="text-align:center;">
-    (Coming soon)
-  </div>
 </div>
 
 <!-- Existing Modal -->
@@ -443,6 +391,7 @@
 </div>
 
 <script>
+  // Original Payment Gateway logic
   const nameData = {
     james:  { option1: 0, option2: 0, option3: 0, option4: 0, option5: 0 },
     allen:  { option1: 532, option2: 719, option3: 324, option4: 100, option5: 115 },
@@ -464,29 +413,27 @@
     const raw = document.getElementById("username").value;
     const input = sanitize(raw);
 
-    if (!input) {
-      alert("Please enter your name!");
-      return;
-    }
-
-    if (!nameData[input]) {
-      alert("Name not recognized!");
-      return;
-    }
+    if (!input) { alert("Please enter your name!"); return; }
+    if (!nameData[input]) { alert("Name not recognized!"); return; }
 
     currentUser = input;
-
     document.getElementById("nameBox").style.display = "none";
+    document.getElementById("welcomeText").textContent = "Welcome " + raw.trim() + "!";
+    document.getElementById("buttonGroup").style.display = "block";
 
-    document.getElementById("welcomeText").textContent =
-      "Welcome " + raw.trim() + "!";
-
-    const group = document.getElementById("buttonGroup");
-    group.style.display = "block";
-
-    group.querySelectorAll("button").forEach(btn => {
+    document.getElementById("buttonGroup").querySelectorAll("button").forEach(btn => {
       btn.disabled = false;
     });
+
+    document.getElementById("resetUser").style.display = "block";
+  }
+
+  function resetUser() {
+    document.getElementById("username").value = "";
+    document.getElementById("buttonGroup").style.display = "none";
+    document.getElementById("welcomeText").innerText = "";
+    document.getElementById("resetUser").style.display = "none";
+    document.getElementById("nameBox").style.display = "block";
   }
 
   function openModal(imageSrc, optionKey) {
@@ -511,50 +458,8 @@
     document.getElementById("fullscreen").style.display = "none";
     document.getElementById("fullscreenImg").src = "";
   }
-</script>
-<script>
-  function resetUser() {
-    // Reset input
-    document.getElementById("username").value = "";
 
-    // Hide welcome + buttons
-    document.getElementById("buttonGroup").style.display = "none";
-    document.getElementById("welcomeText").innerText = "";
-    document.getElementById("resetUser").style.display = "none";
-
-    // Show name input again
-    document.getElementById("nameBox").style.display = "block";
-  }
-
-  // Hook into existing unlock flow WITHOUT modifying it
-  const originalUnlock = window.unlock;
-  window.unlock = function () {
-    originalUnlock();
-
-    // Show reset link after unlock
-    const reset = document.getElementById("resetUser");
-    if (reset) reset.style.display = "block";
-  };
-</script>
-
-  <script>
-  // Display the current month dynamically
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  const now = new Date();
-  const currentMonthName = monthNames[now.getMonth()];
-
-  const monthSpan = document.getElementById("currentMonth");
-  if(monthSpan) {
-    monthSpan.textContent = currentMonthName;
-  }
-</script>
-
-    <script>
-  // Define images and names for each month
+  // Dynamic month image and holder
   const monthlyHolders = {
     January:  { img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", name: "James" },
     February: { img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", name: "Nikki" },
@@ -572,13 +477,12 @@
 
   const now = new Date();
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
   ];
   const currentMonthName = monthNames[now.getMonth()];
   document.getElementById("currentMonth").textContent = currentMonthName;
 
-  // Set image and name dynamically
   const monthData = monthlyHolders[currentMonthName];
   if(monthData){
     document.getElementById("monthImage").src = monthData.img;
