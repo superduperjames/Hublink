@@ -100,6 +100,70 @@
     .current-month-holder .highlight-month { color: #5a67d8; font-weight: 700; }
     .month-holder-name { font-size: 28px; font-weight: 700; color: #1a202c; margin-top: 8px; }
 
+    /* Health + Wellness layout fixes */
+.wellness-card {
+  text-align: center;
+}
+
+.wellness-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.wellness-card .package-image {
+  width: 180px;
+  height: 140px;
+  margin: 0 auto;
+}
+
+.wellness-card .current-month-holder {
+  text-align: center;
+}
+
+.wellness-card .month-holder-name {
+  text-align: center;
+}
+
+.wellness-bottom-row {
+  margin-top: 18px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+}
+
+.upload-or-btn {
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  background: #1a202c;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.or-info {
+  text-align: left;
+  max-width: 220px;
+  font-size: 13px;
+  color: #444;
+}
+
+.or-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #1a202c;
+}
+
+.or-info ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
     /* Modal */
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease forwards; }
     .modal-content { background: white; padding: 20px; border-radius: 16px; max-width: 70%; text-align: center; transform: scale(0.92); opacity: 0; animation: popIn 0.35s ease forwards; }
@@ -149,20 +213,49 @@
     </div>
   </div>
 
-  <!-- Second Card: Health + Wellness -->
-  <div class="card card-medium">
-    <div class="card-title">Health + Wellness Package</div>
-    <div class="package-row">
-      <div class="package-image" id="monthImageContainer">
-        <img id="monthImage" src="" alt="">
-      </div>
-      <div class="package-content">
-        <div class="current-month-holder">Our Title Holder for the month of <span id="currentMonth" class="highlight-month"></span> is:</div>
-        <div class="month-holder-name" id="monthHolderName"></div>
-        <button class="faq-btn" onclick="openFAQModal()">Click here for the package mechanics and FAQs</button>
+<!-- Second Card: Health + Wellness -->
+<div class="card card-medium wellness-card">
+  <div class="card-title">Health + Wellness Package</div>
+
+  <div class="wellness-content">
+    <div class="package-image" id="monthImageContainer">
+      <img id="monthImage" src="" alt="">
+    </div>
+
+    <div class="current-month-holder">
+      Our Title Holder for the month of
+      <span id="currentMonth" class="highlight-month"></span>
+      is:
+    </div>
+
+    <div class="month-holder-name" id="monthHolderName"></div>
+
+    <button class="faq-btn" onclick="openFAQModal()">
+      Click here for the package mechanics and FAQs
+    </button>
+
+    <!-- Bottom row -->
+    <div class="wellness-bottom-row">
+      <!-- Left button -->
+      <button
+        class="upload-or-btn"
+        onclick="window.open('https://example.com', '_blank')">
+        Upload OR
+      </button>
+
+      <!-- Right content -->
+      <div class="or-info">
+        <div class="or-title">Placeholder Title</div>
+        <ul>
+          <li>Placeholder bullet item one</li>
+          <li>Placeholder bullet item two</li>
+          <li>Placeholder bullet item three</li>
+        </ul>
       </div>
     </div>
   </div>
+</div>
+
 
   <!-- Third Card: Wedding Checklist -->
   <div class="card card-medium">
