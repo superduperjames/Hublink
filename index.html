@@ -361,10 +361,14 @@
         <div class="month-holder-name" id="monthHolderName">
           <!-- Name dynamically populated -->
         </div>
+        <div style="margin-top:16px;">
+  <button class="faq-btn" onclick="openFAQModal()">Click here for the package mechanics and FAQs</button>
+</div>
       </div>
     </div>
   </div>
 
+  
   <!-- Third Card: Wedding Checklist -->
   <div class="card">
     <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
@@ -384,7 +388,15 @@
     <div class="close" onclick="closeModal()">Close</div>
   </div>
 </div>
-
+  
+<!-- FAQ Modal for second card -->
+<div class="modal" id="faqModal" onclick="closeFAQModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <img id="faqImage" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="">
+    <div class="close" onclick="closeFAQModal()">Close</div>
+  </div>
+</div>
+  
 <!-- Fullscreen Image -->
 <div class="fullscreen" id="fullscreen" onclick="closeFullscreen()">
   <div class="fullscreen-close" onclick="closeFullscreen()">×</div>
@@ -436,6 +448,27 @@
     document.getElementById("resetUser").style.display = "none";
     document.getElementById("nameBox").style.display = "block";
   }
+  
+function openFAQModal() {
+  const faq = document.getElementById("faqModal");
+  const content = faq.querySelector(".modal-content");
+  faq.style.display = "flex";
+
+  // Reset transform & opacity for animation
+  content.style.transform = "scale(0.92)";
+  content.style.opacity = "0";
+
+  // Trigger the popIn animation
+  setTimeout(() => {
+    content.style.transform = "scale(1)";
+    content.style.opacity = "1";
+  }, 10);
+}
+
+function closeFAQModal() {
+  const faq = document.getElementById("faqModal");
+  faq.style.display = "none";
+}
 
   function openModal(imageSrc, optionKey) {
     document.getElementById("modalImage").src = imageSrc;
