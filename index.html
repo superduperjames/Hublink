@@ -166,7 +166,7 @@
 
     /* Gallery card: half-height */
 .gallery-card {
-  padding-bottom: 12px;
+  padding-bottom: 40px;
 }
 
 .gallery-wrapper {
@@ -217,6 +217,15 @@
 .gallery-arrow.left { left: -6px; }
 .gallery-arrow.right { right: -6px; }
 
+    .gallery-track img {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.gallery-track img:hover {
+  transform: scale(1.05);
+}
+    
     /* Modal */
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease forwards; }
     .modal-content { background: white; padding: 20px; border-radius: 16px; max-width: 70%; text-align: center; transform: scale(0.92); opacity: 0; animation: popIn 0.35s ease forwards; }
@@ -338,16 +347,17 @@
     <div class="gallery-viewport">
       <div class="gallery-track" id="galleryTrack">
         <!-- Placeholders: replace src later, up to 10 images -->
-        <img src="https://via.placeholder.com/300x200?text=1">
-        <img src="https://via.placeholder.com/300x200?text=2">
-        <img src="https://via.placeholder.com/300x200?text=3">
-        <img src="https://via.placeholder.com/300x200?text=4">
-        <img src="https://via.placeholder.com/300x200?text=5">
-        <img src="https://via.placeholder.com/300x200?text=6">
-        <img src="https://via.placeholder.com/300x200?text=7">
-        <img src="https://via.placeholder.com/300x200?text=8">
-        <img src="https://via.placeholder.com/300x200?text=9">
-        <img src="https://via.placeholder.com/300x200?text=10">
+<img src="https://via.placeholder.com/300x200?text=1" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=2" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=3" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=4" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=5" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=6" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=7" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=8" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=9" onclick="openFullscreen(this.src)">
+<img src="https://via.placeholder.com/300x200?text=10" onclick="openFullscreen(this.src)">
+
       </div>
     </div>
 
