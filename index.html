@@ -129,7 +129,6 @@
       background: #2d3748;
     }
 
-    /* Existing Modal */
     .modal {
       display: none;
       position: fixed;
@@ -173,7 +172,6 @@
       text-decoration:underline;
     }
 
-    /* Fullscreen Image Viewer */
     .fullscreen {
       display: none;
       position: fixed;
@@ -200,71 +198,6 @@
       font-weight: 600;
     }
 
-  .stack {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-    align-items: center;
-  }
-
-  .secondary-card {
-    background: #ffffff;
-    width: 92%;
-    max-width: 720px;
-    padding: 24px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    display: flex;
-    gap: 20px;
-    align-items: center;
-  }
-
-  .package-image {
-    position: relative;
-    width: 220px;
-    height: 140px;
-    border-radius: 14px;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-
-  .package-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .package-title {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(0,0,0,0.65);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 6px 10px;
-    border-radius: 8px;
-  }
-
-  .package-content {
-    color: #1a202c;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 640px) {
-    .secondary-card {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .package-image {
-      width: 100%;
-      height: 160px;
-    }
-  }
-    
     @keyframes buttonIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -277,13 +210,71 @@
     @keyframes popIn {
       to { transform: scale(1); opacity: 1; }
     }
+
+    /* ===== ADDED STYLES (NEW CARD ONLY) ===== */
+    .secondary-card {
+      background: #ffffff;
+      width: 92%;
+      max-width: 720px;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .package-image {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .package-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .package-title {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .package-content {
+      color: #1a202c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .secondary-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .package-image {
+        width: 100%;
+        height: 160px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-<div class="stack">
-  <div class="card">
+<div class="card">
 
   <img
     src="https://res.cloudinary.com/eventmobi/image/upload/v1768044863/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Screenshot_2026-01-10_at_7.33.42_PM.png"
@@ -316,6 +307,19 @@
 
 </div>
 
+<!-- ===== ADDED CARD (NEW ONLY) ===== -->
+<div class="secondary-card">
+  <div class="package-image">
+    <span class="package-title">Health and Wellness Package</span>
+    <img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74" alt="">
+  </div>
+
+  <div class="package-content">
+    <strong>What’s included</strong><br>
+    Wellness consultations, health resources, and curated support designed to help you feel balanced and supported.
+  </div>
+</div>
+
 <!-- Existing Modal -->
 <div class="modal" id="modal" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
@@ -330,23 +334,7 @@
   <div class="fullscreen-close" onclick="closeFullscreen()">×</div>
   <img id="fullscreenImg">
 </div>
-</div> <!-- end of main card -->
 
-  <div class="secondary-card">
-    <div class="package-image">
-      <span class="package-title">Health and Wellness Package</span>
-      <img
-        src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74"
-        alt="Health and Wellness"
-      >
-    </div>
-
-    <div class="package-content">
-      <strong>What’s included</strong><br>
-      Wellness consultations, health resources, and curated support designed to help you feel balanced, supported, and cared for.
-    </div>
-  </div>
-</div> <!-- end stack -->
 <script>
   const nameData = {
     james:  { option1: 0, option2: 0, option3: 0, option4: 0, option5: 0 },
@@ -361,65 +349,4 @@
 
   let currentUser = "";
 
-  function sanitize(input) {
-    return input.toLowerCase().replace(/\s+/g, "").trim();
-  }
-
-  function unlock() {
-    const raw = document.getElementById("username").value;
-    const input = sanitize(raw);
-
-    if (!input) {
-      alert("Please enter your name!");
-      return;
-    }
-
-    if (!nameData[input]) {
-      alert("Name not recognized!");
-      return;
-    }
-
-    currentUser = input;
-
-    document.getElementById("nameBox").style.display = "none";
-
-  document.getElementById("welcomeText").textContent =
-    "Welcome " + raw.trim() + "!";
-
-  const group = document.getElementById("buttonGroup");
-  group.style.display = "block";
-
-  group.querySelectorAll("button").forEach(btn => {
-    btn.disabled = false;
-  });
-}
-
-function openModal(imageSrc, optionKey) {
-  document.getElementById("modalImage").src = imageSrc;
-
-  // Format the amount with Peso sign and optional "Amount:" text
-  const amount = nameData[currentUser][optionKey];
-  document.getElementById("amountText").textContent = "Amount: ₱" + amount;
-
-  document.getElementById("modal").style.display = "flex";
-}
-
-  function closeModal() {
-    document.getElementById("modal").style.display = "none";
-    document.getElementById("modalImage").src = "";
-    document.getElementById("amountText").textContent = "";
-  }
-
-  function openFullscreen(src) {
-    document.getElementById("fullscreenImg").src = src;
-    document.getElementById("fullscreen").style.display = "flex";
-  }
-
-  function closeFullscreen() {
-    document.getElementById("fullscreen").style.display = "none";
-    document.getElementById("fullscreenImg").src = "";
-  }
-</script>
-
-</body>
-</html>
+  function sanitize(inp
