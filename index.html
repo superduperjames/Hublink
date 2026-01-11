@@ -10,14 +10,33 @@
 
     body {
       margin-top: 5%;
+      margin-bottom:10%;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: url('https://res.cloudinary.com/eventmobi/image/upload/v1767909276/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/BG.png') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
-      display: grid;
+      display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* ===== ADDED: CENTERING WRAPPER ===== */
+    .card-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* ===== ADDED: CARD TITLES ===== */
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 18px;
+      text-align: center;
     }
 
     .card {
@@ -129,6 +148,64 @@
       background: #2d3748;
     }
 
+    /* ===== ADDED: SECOND & THIRD CARD ===== */
+    .secondary-card {
+      background: #ffffff;
+      width: 92%;
+      max-width: 720px;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .package-image {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .package-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .package-title {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .package-content {
+      color: #1a202c;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .secondary-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .package-image {
+        width: 100%;
+        height: 160px;
+      }
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -210,114 +287,64 @@
     @keyframes popIn {
       to { transform: scale(1); opacity: 1; }
     }
-
-    /* ===== ADDED STYLES (NEW CARD ONLY) ===== */
-    .secondary-card {
-      background: #ffffff;
-      width: 92%;
-      max-width: 720px;
-      padding: 24px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      margin-top: 24px;
-    }
-
-    .package-image {
-      position: relative;
-      width: 220px;
-      height: 140px;
-      border-radius: 14px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .package-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .package-title {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0,0,0,0.65);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 8px;
-    }
-
-    .package-content {
-      color: #1a202c;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 640px) {
-      .secondary-card {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .package-image {
-        width: 100%;
-        height: 160px;
-      }
-    }
   </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="card-stack">
 
-  <img
-    src="https://res.cloudinary.com/eventmobi/image/upload/v1768044863/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Screenshot_2026-01-10_at_7.33.42_PM.png"
-    class="hero-image"
-    onclick="openFullscreen(this.src)"
-  >
+  <div class="card">
+    <div class="card-title">Interactive Payment Gateway</div>
 
-  <div class="downloads">
-    <a href="https://res.cloudinary.com/eventmobi/image/upload/v1768044862/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Expenses_Updated3.pdf" download>Download as PDF</a>
-    <a href="https://res.cloudinary.com/eventmobi/raw/upload/v1768044862/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Expenses_Updated3.xlsx" download>Download as XLS File</a>
-  </div>
+    <img
+      src="https://res.cloudinary.com/eventmobi/image/upload/v1768044863/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Screenshot_2026-01-10_at_7.33.42_PM.png"
+      class="hero-image"
+      onclick="openFullscreen(this.src)"
+    >
 
-  <div class="name-box" id="nameBox">
-    <p>Enter your name to continue</p>
-    <input type="text" id="username" placeholder="Your name">
-    <button class="continue-btn" onclick="unlock()">Continue</button>
-  </div>
+    <div class="downloads">
+      <a href="https://res.cloudinary.com/eventmobi/image/upload/v1768044862/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Expenses_Updated3.pdf" download>Download as PDF</a>
+      <a href="https://res.cloudinary.com/eventmobi/raw/upload/v1768044862/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Expenses_Updated3.xlsx" download>Download as XLS File</a>
+    </div>
 
-  <div class="button-group" id="buttonGroup">
-    <div class="welcome" id="welcomeText"></div>
+    <div class="name-box" id="nameBox">
+      <p>Enter your name to continue</p>
+      <input type="text" id="username" placeholder="Your name">
+      <button class="continue-btn" onclick="unlock()">Continue</button>
+    </div>
 
-    <div class="action-buttons">
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910366/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/JAMES.png', 'option1')">Pay James Here!</button>
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/NIKKI.png', 'option2')">Pay Nikki Here!</button>
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/AJ.png', 'option3')">Pay AJ Here!</button>
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767926646/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/ANJO.png', 'option4')">Pay Anjo Here!</button>
-      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1768042835/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/CELINE.png', 'option5')">Pay Celine Here!</button>
+    <div class="button-group" id="buttonGroup">
+      <div class="welcome" id="welcomeText"></div>
+
+      <div class="action-buttons">
+        <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910366/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/JAMES.png', 'option1')">Pay James Here!</button>
+        <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/NIKKI.png', 'option2')">Pay Nikki Here!</button>
+        <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/AJ.png', 'option3')">Pay AJ Here!</button>
+        <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767926646/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/ANJO.png', 'option4')">Pay Anjo Here!</button>
+        <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1768042835/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/CELINE.png', 'option5')">Pay Celine Here!</button>
+      </div>
     </div>
   </div>
 
-</div>
+  <div class="secondary-card">
+    <div class="package-image">
+      <span class="package-title">Health + Wellness Package</span>
+      <img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74" alt="">
+    </div>
 
-<!-- ===== ADDED CARD (NEW ONLY) ===== -->
-<div class="secondary-card">
-  <div class="package-image">
-    <span class="package-title">Health and Wellness Package</span>
-    <img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b74" alt="">
+    <div class="package-content">
+      Wellness consultations, health resources, and curated support.
+    </div>
   </div>
 
-  <div class="package-content">
-    <strong>What’s included</strong><br>
-    Wellness consultations, health resources, and curated support designed to help you feel balanced and supported.
+  <div class="secondary-card">
+    <div class="package-content" style="width:100%; text-align:center;">
+      <strong>Anjo + Kath Wedding Essentials Checklist</strong><br><br>
+      (Coming soon)
+    </div>
   </div>
+
 </div>
 
 <!-- Existing Modal -->
