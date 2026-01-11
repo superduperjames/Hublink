@@ -164,6 +164,59 @@
   margin: 0;
 }
 
+    /* Gallery card: half-height */
+.gallery-card {
+  padding-bottom: 12px;
+}
+
+.gallery-wrapper {
+  position: relative;
+  width: 100%;
+  height: 90px; /* roughly half of your other image cards */
+  display: flex;
+  align-items: center;
+}
+
+.gallery-viewport {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 8px;
+  transition: transform 0.4s ease;
+}
+
+.gallery-track img {
+  width: calc(100% / 5);
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Arrows */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.gallery-arrow.left { left: -6px; }
+.gallery-arrow.right { right: -6px; }
+
     /* Modal */
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease forwards; }
     .modal-content { background: white; padding: 20px; border-radius: 16px; max-width: 70%; text-align: center; transform: scale(0.92); opacity: 0; animation: popIn 0.35s ease forwards; }
@@ -276,10 +329,32 @@
     <div class="card-title">New Image Box 3</div>
     <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4" style="width:100%; border-radius:10px;">
   </div>
-  <div class="card card-small">
-    <div class="card-title">New Image Box 4</div>
-    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" style="width:100%; border-radius:10px;">
+<div class="card card-small gallery-card">
+  <div class="card-title">New Image Box 4</div>
+
+  <div class="gallery-wrapper">
+    <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
+
+    <div class="gallery-viewport">
+      <div class="gallery-track" id="galleryTrack">
+        <!-- Placeholders: replace src later, up to 10 images -->
+        <img src="https://via.placeholder.com/300x200?text=1">
+        <img src="https://via.placeholder.com/300x200?text=2">
+        <img src="https://via.placeholder.com/300x200?text=3">
+        <img src="https://via.placeholder.com/300x200?text=4">
+        <img src="https://via.placeholder.com/300x200?text=5">
+        <img src="https://via.placeholder.com/300x200?text=6">
+        <img src="https://via.placeholder.com/300x200?text=7">
+        <img src="https://via.placeholder.com/300x200?text=8">
+        <img src="https://via.placeholder.com/300x200?text=9">
+        <img src="https://via.placeholder.com/300x200?text=10">
+      </div>
+    </div>
+
+    <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
   </div>
+</div>
+
 
 </div>
 
@@ -381,6 +456,22 @@
   document.getElementById("currentMonth").textContent=currentMonthName;
   const monthData=monthlyHolders[currentMonthName];
   if(monthData){ document.getElementById("monthImage").src=monthData.img; document.getElementById("monthHolderName").textContent=monthData.name; }
+</script>
+
+  <script>
+  let galleryIndex = 0;
+
+  function scrollGallery(direction) {
+    const track = document.getElementById("galleryTrack");
+    const visible = 5;
+    const total = track.children.length;
+
+    galleryIndex += direction;
+    galleryIndex = Math.max(0, Math.min(galleryIndex, total - visible));
+
+    const imageWidth = track.children[0].offsetWidth + 8;
+    track.style.transform = `translateX(-${galleryIndex * imageWidth}px)`;
+  }
 </script>
 
 </body>
