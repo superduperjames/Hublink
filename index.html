@@ -171,68 +171,6 @@ textarea {
   margin: 0;
 }
 
-    /* Gallery card: half-height */
-.gallery-card {
-  padding-bottom: 40px;
-  background: #f9c301;
-}
-
-.gallery-wrapper {
-  position: relative;
-  width: 100%;
-  height: 90px; /* roughly half of your other image cards */
-  display: flex;
-  align-items: center;
-}
-
-.gallery-viewport {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-}
-
-.gallery-track {
-  display: flex;
-  gap: 8px;
-  transition: transform 0.4s ease;
-}
-
-.gallery-track img {
-  width: calc(100% / 5);
-  height: 90px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-
-/* Arrows */
-.gallery-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
-  border: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-}
-
-.gallery-arrow.left { left: -6px; }
-.gallery-arrow.right { right: -6px; }
-
-    .gallery-track img {
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.gallery-track img:hover {
-  transform: scale(1.05);
-}
     /* Card background colors by order */
 .card-grid .card:nth-child(1) {
   background: #fef66a;
@@ -553,7 +491,30 @@ textarea {
   cursor: pointer;
   font-weight: 600;
 }
-    
+
+
+    /* Highlights gallery */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.highlights-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.highlights-grid img:hover {
+  transform: scale(1.04);
+}
+
   </style>
 </head>
 
@@ -709,25 +670,19 @@ textarea {
   </div>
   
 <div class="card card-small gallery-card">
-  <div class="card-title">Gallery</div>
-  <div class="gallery-wrapper">
-    <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
-    <div class="gallery-viewport">
-      <div class="gallery-track" id="galleryTrack">
-        <!-- Placeholders: replace src later, up to 10 images -->
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162617/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/52FE04BB-72F1-4BFA-8F83-7B909B17DDB0_1_201_a.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162648/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/54EB913E-ABED-4BF1-BB31-948F9BF70844_1_201_a.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162615/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/941C6FAF-F7D7-4EA3-AAEA-BDE990696B56_1_102_o.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162613/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/9343BF98-7FD1-458A-98B7-E8A894A15A71_1_105_c.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162610/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8BF63193-F071-4988-B407-5318E1FA93D2_1_105_c.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162609/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/7AA126FF-57C1-42BD-B559-E21763842170_1_201_a.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162608/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/DCD42B5A-4874-4F70-89EB-AA1AF6ED0E15_1_201_a.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162605/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162602/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8B15BD02-2893-47C7-A475-B3750D215A18_1_105_c.jpg" onclick="openFullscreen(this.src)">
-<img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162599/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8DD7B5ED-2516-487D-AE6E-243E796AA679_1_105_c.jpg" onclick="openFullscreen(this.src)">
-      </div>
-    </div>
-    <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
+  <div class="card-title">This month’s highlights</div>
+
+  <div class="highlights-grid">
+    <!-- Replace / add images as needed (up to 16) -->
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162617/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/52FE04BB-72F1-4BFA-8F83-7B909B17DDB0_1_201_a.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162648/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/54EB913E-ABED-4BF1-BB31-948F9BF70844_1_201_a.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162615/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/941C6FAF-F7D7-4EA3-AAEA-BDE990696B56_1_102_o.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162613/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/9343BF98-7FD1-458A-98B7-E8A894A15A71_1_105_c.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162610/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8BF63193-F071-4988-B407-5318E1FA93D2_1_105_c.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162609/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/7AA126FF-57C1-42BD-B559-E21763842170_1_201_a.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162608/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/DCD42B5A-4874-4F70-89EB-AA1AF6ED0E15_1_201_a.jpg" onclick="openFullscreen(this.src)">
+    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162605/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c.jpg" onclick="openFullscreen(this.src)">
+    <!-- Repeat until 16 images total -->
   </div>
 </div>
 
@@ -1085,26 +1040,43 @@ document.addEventListener("DOMContentLoaded", function() {
 
   renderGallery();
 
-  // ======================
-  // FULLSCREEN CLOSE
-  // ======================
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
   const fullscreen = document.getElementById("celebrantFullscreen");
   const fullscreenImg = document.getElementById("celebrantFullscreenImg");
+  const closeBtn = document.getElementById("celebrantFullscreenClose");
 
-  document.getElementById("celebrantFullscreenClose").onclick = (e) => {
+  // ======================
+  // OPEN FULLSCREEN (GLOBAL)
+  // ======================
+  window.openFullscreen = function (src) {
+    fullscreenImg.src = src;
+    fullscreen.style.display = "flex";
+  };
+
+  // ======================
+  // CLOSE FULLSCREEN
+  // ======================
+  function closeFullscreen() {
+    fullscreen.style.display = "none";
+    fullscreenImg.src = "";
+  }
+
+  // Close via X button
+  closeBtn.onclick = (e) => {
     e.stopPropagation();
-    fullscreen.style.display = "none";
-    fullscreenImg.src = "";
+    closeFullscreen();
   };
 
+  // Close by clicking background
   fullscreen.onclick = () => {
-    fullscreen.style.display = "none";
-    fullscreenImg.src = "";
+    closeFullscreen();
   };
-
 });
 </script>
 
+
+  
 
 </body>
 </html>
