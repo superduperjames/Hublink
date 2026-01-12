@@ -297,13 +297,18 @@ textarea {
   font-size: 18px;
 }
 
-/* Progress bar wrapper */
+/* Progress bar wrapper - sticky */
 .wedding-card .progress-wrapper {
+  position: sticky;
+  top: 0; /* sticks to top of the card */
+  background: inherit; /* keep the card background */
+  padding: 8px 0; /* spacing for sticky header */
+  z-index: 10; /* ensure it stays above checklist items */
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 12px;
   align-items: center;
+  border-bottom: 1px solid rgba(0,0,0,0.15); /* subtle divider */
 }
 
 /* Progress bar background */
@@ -339,13 +344,32 @@ textarea {
   cursor: pointer;
 }
 
-/* Checklist body */
+/* Checklist body - scrollable */
 .wedding-card .checklist-body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-height: 300px;  /* fixed height for scroll */
+  overflow-y: auto;   /* vertical scroll */
+  padding-right: 4px; /* padding for scrollbar */
+  margin-top: 8px;    /* spacing under sticky header */
 }
 
+/* Optional: custom scrollbar for modern look */
+.wedding-card .checklist-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wedding-card .checklist-body::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 3px;
+}
+
+.wedding-card .checklist-body::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+    
 /* Individual checklist item */
 .wedding-card .checklist-item {
   display: flex;
@@ -487,21 +511,19 @@ textarea {
 
 <!-- Third Card: Wedding Checklist -->
 <div class="wedding-card">
-  <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
+  <div class="card-title">Anjo & Kath Wedding Essentials Checklist</div>
 
-  <!-- Progress -->
+  <!-- Sticky Progress -->
   <div class="progress-wrapper">
     <div class="progress-label">
       <span id="progressCount">0</span>/<span id="totalCount">0</span> completed
-      &nbsp;&nbsp;|&nbsp;&nbsp;
-      <a href="#" class="toggle-link" onclick="toggleChecklist(event)">Collapse checklist</a>
     </div>
     <div class="progress-bar-bg">
       <div class="progress-bar-fill" id="progressFill"></div>
     </div>
   </div>
 
-  <!-- Checklist -->
+  <!-- Scrollable Checklist -->
   <div class="checklist-body" id="checklistBody"></div>
 
   <!-- Actions -->
@@ -509,6 +531,7 @@ textarea {
     <a href="#" onclick="downloadChecklistPDF(event)">Download checklist as PDF</a>
   </div>
 </div>
+
 
 
 
