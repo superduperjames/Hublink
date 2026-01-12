@@ -490,24 +490,25 @@ textarea {
   gap: 4px;
 }
 
-/* Updated 2x2 grid styling for Birthday Celebrants */
-.celebrant-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4%;
-  justify-content: space-between;
+/* 2x2 Birthday gallery grid */
+.celebrant-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 100px);
+  gap: 6px;
 }
-.celebrant-gallery img {
-  height: 100px;
+.celebrant-gallery-grid img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
-.celebrant-gallery img:hover {
+.celebrant-gallery-grid img:hover {
   transform: scale(1.05);
 }
-
+    
 /* Arrows */
 .gallery-arrow {
   background: #1a202c;
@@ -651,7 +652,7 @@ textarea {
 
   <!-- Additional small cards ------------------------>
   
-<!-- Updated Birthday Celebrant Card -->
+<!-- HTML -->
 <div class="card card-small birthday-card">
   <div class="card-title">Birthday Celebrant</div>
 
@@ -664,21 +665,23 @@ textarea {
     <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
 
-  <!-- 2x2 Gallery Grid -->
+  <!-- 2x2 Gallery -->
   <div class="celebrant-gallery-wrapper">
-    <div class="celebrant-gallery" id="celebrantGallery">
+    <button class="gallery-arrow" id="prevGallery">&lt;</button>
+    <div class="celebrant-gallery-grid" id="celebrantGallery">
       <!-- Images dynamically loaded here -->
     </div>
+    <button class="gallery-arrow" id="nextGallery">&gt;</button>
   </div>
 
-  <!-- Next Celebrant -->
+  <!-- Next celebrant -->
   <div class="celebrant-next">
     Up next: <span id="nextCelebrantName">[Next Name]</span>
   </div>
 
   <!-- Greet Button -->
   <div class="celebrant-action">
-    <button id="greetButton" onclick="greetLink()">Greet them here!</button>
+    <button id="greetButton">Greet them here!</button>
   </div>
 </div>
 
@@ -687,7 +690,6 @@ textarea {
   <div class="fullscreen-close" id="celebrantFullscreenClose">×</div>
   <img id="celebrantFullscreenImg">
 </div>
-
 
 
   <div class="card card-small">
@@ -929,9 +931,6 @@ document.addEventListener("DOMContentLoaded", loadChecklist);
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const now = new Date();
-  const monthNames=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const currentMonth = monthNames[now.getMonth()];
   const birthdayData = {
     January: { 
       name: ["Sean"], 
@@ -996,7 +995,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=Nikki4"
       ]
     },
-        December: { 
+    December: { 
       name: ["James"], 
       date: ["Dec 5"], 
       next: ["Sean"],
@@ -1009,31 +1008,53 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const monthNames = Object.keys(birthdayData);
   const currentMonth = monthNames[new Date().getMonth()];
-
   const data = birthdayData[currentMonth];
-  if(!data) return;
+  if (!data) return;
 
   document.getElementById("celebrantNameText").textContent = data.name.join(", ");
   document.getElementById("currentCelebrantDate").textContent = data.date.join(", ");
   document.getElementById("nextCelebrantName").textContent = data.next.join(", ");
 
-  // Populate gallery in 2x2 grid
+  // Greet button
+  document.getElementById("greetButton").onclick = () => {
+    // Replace with your actual link
+    window.open("https://example.com/greet", "_blank");
+  };
+
+  // Gallery pagination (2x2)
   const gallery = document.getElementById("celebrantGallery");
-  gallery.innerHTML = "";
-  data.gallery.forEach(src => {
-    const img = document.createElement("img");
-    img.src = src;
-    img.alt = "Celebrant Image";
-    img.style.width = "48%";  // two per row
-    img.style.marginBottom = "4%";
-    img.onclick = () => {
-      document.getElementById("celebrantFullscreenImg").src = src;
-      document.getElementById("celebrantFullscreen").style.display = "flex";
-    };
-    gallery.appendChild(img);
-  });
+  let galleryIndex = 0;
+  const pageSize = 4;
+
+  function renderGallery() {
+    gallery.innerHTML = "";
+    const page = data.gallery.slice(galleryIndex, galleryIndex + pageSize);
+    page.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "Celebrant Image";
+      img.onclick = () => {
+        document.getElementById("celebrantFullscreenImg").src = src;
+        document.getElementById("celebrantFullscreen").style.display = "flex";
+      };
+      gallery.appendChild(img);
+    });
+  }
+
+  document.getElementById("prevGallery").onclick = () => {
+    galleryIndex -= pageSize;
+    if (galleryIndex < 0) galleryIndex = Math.max(0, data.gallery.length - pageSize);
+    renderGallery();
+  };
+  document.getElementById("nextGallery").onclick = () => {
+    galleryIndex += pageSize;
+    if (galleryIndex >= data.gallery.length) galleryIndex = 0;
+    renderGallery();
+  };
+
+  renderGallery();
 
   // Close fullscreen
   document.getElementById("celebrantFullscreenClose").onclick = () => {
@@ -1042,7 +1063,6 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 });
 </script>
-
 
 
 </body>
