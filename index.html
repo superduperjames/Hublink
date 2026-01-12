@@ -496,16 +496,17 @@ textarea {
 
 /* 2x2 Birthday gallery grid */
 .celebrant-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 100px);
-  grid-template-rows: repeat(2, 100px);
-  gap: 6px;
+   display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 520px;   /* increase this */
+  width: 100%;
 }
 
 /* Gallery images */
 .celebrant-gallery-grid img {
   width: 100%;
-  height: 100%;
+  height: 150%;
   object-fit: cover;
   border-radius: 6px;
   cursor: pointer;
