@@ -501,21 +501,30 @@ textarea {
   transform: scale(1.05);
   background: #FFBF46;
 }
-/* Birthday Card Gallery (2x2) */
-.celebrant-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
+/* Gallery wrapper */
+.celebrant-gallery-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   margin-top: 10px;
-  width: 100%;
+}
+
+.celebrant-gallery {
+  display: flex;
+  overflow: hidden; /* hide extra images */
+  gap: 6px;
+  scroll-behavior: smooth;
+  flex: 1;
 }
 
 .celebrant-gallery img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
+  width: calc((100% - 18px) / 4); /* 4 images per view, adjust gap */
+  height: 100px;
   object-fit: cover;
   border-radius: 6px;
   cursor: pointer;
+  flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 
@@ -523,17 +532,22 @@ textarea {
   transform: scale(1.05);
 }
 
-/* Fullscreen overlay */
-#celebrantFullscreen {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  z-index: 3000;
-  align-items: center;
-  justify-content: center;
+.gallery-arrow {
+  background: #1a202c;
+  color: #fff;
+  font-size: 24px;
+  border: none;
+  border-radius: 6px;
+  padding: 0 10px;
+  cursor: pointer;
+  user-select: none;
 }
 
+.gallery-arrow:hover {
+  background: #2d3748;
+}
+
+/* Fullscreen overlay */
 #celebrantFullscreen img {
   max-width: 95%;
   max-height: 95%;
@@ -669,14 +683,15 @@ textarea {
     <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
 
-  <!-- Image Gallery (2x2) -->
+  <!-- Horizontal scrollable gallery -->
+<div class="celebrant-gallery-wrapper">
+  <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
   <div class="celebrant-gallery" id="celebrantGallery">
-    <!-- Placeholder images -->
-    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162610/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8BF63193-F071-4988-B407-5318E1FA93D2_1_105_c.jpg" alt="Gallery Image 1">
-    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162602/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8B15BD02-2893-47C7-A475-B3750D215A18_1_105_c.jpg" alt="Gallery Image 2">
-    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162599/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8DD7B5ED-2516-487D-AE6E-243E796AA679_1_105_c.jpg" alt="Gallery Image 3">
-    <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768197959/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/43307EE4-9DFB-46E5-9745-CE1E2FDB1FBD_4_5005_c.jpg" alt="Gallery Image 4">
+    <!-- Images dynamically loaded here -->
   </div>
+  <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
+</div>
+
 
   <!-- Next month -->
   <div class="celebrant-next">
@@ -694,6 +709,7 @@ textarea {
   <div class="fullscreen-close" onclick="closeCelebrantFullscreen()">×</div>
   <img id="celebrantFullscreenImg">
 </div>
+
 
 
 
@@ -932,22 +948,25 @@ function downloadChecklistPDF(e) {
 document.addEventListener("DOMContentLoaded", loadChecklist);
 </script>
 
-<script>
+  <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // Birthday data - multiple next month celebrants
   const birthdayData = {
-    January: { name: "Sean", date: "January 28", next: ["Anjo"] },
-    February: { name: "", date: "", next: ["Anjo", "Allen"] },
-    March: { name: "", date: "", next: ["Anjo", "Allen"] },
-    April: { name: "Anjo" "Allen", date: "Apr 19, April 30", next: ["AJ", "Celine"] },
-    May: { name: "Celine", date: "May 25", next: ["Kath"] },
-    June: { name: "Sean", date: "Jun 30", next: ["Allen"] },
-    July: { name: "Kath", date: "Jul 14", next: ["Mika"] },
-    August: { name: "Allen", date: "Aug 9", next: ["Leo"] },
-    September: { name: "Mika", date: "Sep 3", next: ["Tina"] },
-    October: { name: "Leo", date: "Oct 21", next: ["Mark"] },
-    November: { name: "Tina", date: "Nov 7", next: ["James", "Nikki"] },
-    December: { name: "Mark", date: "Dec 15", next: ["AJ"] }
+    April: { 
+      name: ["Anjo", "Allen"], 
+      date: ["Apr 19", "Apr 30"], 
+      next: ["AJ", "Celine"],
+      gallery: [
+        "https://via.placeholder.com/100?text=Anjo1",
+        "https://via.placeholder.com/100?text=Anjo2",
+        "https://via.placeholder.com/100?text=Anjo3",
+        "https://via.placeholder.com/100?text=Anjo4",
+        "https://via.placeholder.com/100?text=Allen1",
+        "https://via.placeholder.com/100?text=Allen2",
+        "https://via.placeholder.com/100?text=Allen3",
+        "https://via.placeholder.com/100?text=Allen4"
+      ]
+    },
+    // add other months...
   };
 
   const now = new Date();
@@ -958,52 +977,62 @@ document.addEventListener("DOMContentLoaded", function() {
   const currentData = birthdayData[currentMonth];
   const nextData = birthdayData[nextMonth];
 
-  // If no current month celebrant, fallback to next month
-  let displayCurrent = currentData && currentData.name ? currentData : nextData;
+  const displayCurrent = currentData && currentData.name.length ? currentData : nextData;
 
-  // Set current celebrant
-  document.getElementById("celebrantNameText").textContent = displayCurrent.name || "TBD";
-  document.getElementById("currentCelebrantDate").textContent = displayCurrent.date || "TBD";
+  // Display names & dates
+  document.getElementById("celebrantNameText").textContent = displayCurrent.name.join(", ");
+  document.getElementById("currentCelebrantDate").textContent = displayCurrent.date.join(", ");
 
-  // Rotate through next month celebrants
-  const nextCelebrants = nextData.next && nextData.next.length > 0 ? nextData.next : [nextData.name];
+  // Load gallery
+  const galleryContainer = document.getElementById("celebrantGallery");
+  galleryContainer.innerHTML = "";
+  if(displayCurrent.gallery && displayCurrent.gallery.length){
+    displayCurrent.gallery.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "Celebrant Image";
+      img.addEventListener("click", () => {
+        document.getElementById("celebrantFullscreenImg").src = src;
+        document.getElementById("celebrantFullscreen").style.display = "flex";
+      });
+      galleryContainer.appendChild(img);
+    });
+  }
+
+  // Scroll gallery function - snaps by 4 images
+  window.scrollGallery = function(direction){
+    const galleryWidth = galleryContainer.clientWidth;
+    const imgCount = 4; // show 4 images at a time
+    const scrollAmount = galleryWidth; // scroll full width of 4 images
+    galleryContainer.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+  };
+
+  // Next month ticker
+  const nextCelebrants = nextData.next && nextData.next.length > 0 ? nextData.next : nextData.name;
   let nextIndex = 0;
   const nextElem = document.getElementById("nextCelebrantName");
-
   nextElem.textContent = nextCelebrants[nextIndex];
 
   setInterval(() => {
     nextIndex = (nextIndex + 1) % nextCelebrants.length;
     nextElem.textContent = nextCelebrants[nextIndex];
-  }, 3000); // change every 3 seconds
+  }, 3000);
 
-  // Greet button redirect
+  // Greet button
   window.greetLink = function() {
     const url = "https://example.com/greet"; // replace with your link
     window.open(url, "_blank");
-  }
-});
-</script>
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-  // Birthday gallery click to fullscreen
-  const galleryImgs = document.querySelectorAll("#celebrantGallery img");
-  const fullscreen = document.getElementById("celebrantFullscreen");
-  const fullscreenImg = document.getElementById("celebrantFullscreenImg");
+  };
 
-  galleryImgs.forEach(img => {
-    img.addEventListener("click", () => {
-      fullscreenImg.src = img.src;
-      fullscreen.style.display = "flex";
-    });
-  });
-
+  // Close fullscreen
   window.closeCelebrantFullscreen = function() {
-    fullscreen.style.display = "none";
-    fullscreenImg.src = "";
+    const fs = document.getElementById("celebrantFullscreen");
+    fs.style.display = "none";
+    document.getElementById("celebrantFullscreenImg").src = "";
   };
 });
 </script>
+
 
 
 
