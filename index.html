@@ -930,10 +930,10 @@ function downloadChecklistPDF(e) {
 document.addEventListener("DOMContentLoaded", loadChecklist);
 </script>
 
-  <script>
+<script>
 document.addEventListener("DOMContentLoaded", function() {
   const birthdayData = {
- January: { 
+    January: { 
       name: ["Sean"], 
       date: ["Jan 12"], 
       next: ["Anjo", "Allen"],
@@ -959,7 +959,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=Allen4"
       ]
     },
-        September: { 
+    September: { 
       name: ["AJ", "Celine"], 
       date: ["Sept 15", "Sept 16"], 
       next: ["Kath"],
@@ -974,7 +974,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=Celine4"
       ]
     },
-     October: { 
+    October: { 
       name: ["Kath"], 
       date: ["Oct 30"], 
       next: ["Nikki"],
@@ -985,79 +985,70 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=Kath4"
       ]
     },
-     November: { 
+    November: { 
       name: ["Nikki"], 
       date: ["Nov 7"], 
       next: ["James"],
       gallery: [
         "https://via.placeholder.com/100?text=Nikki1",
-        "https://via.placeholder.com/100?text=Nikk2",
+        "https://via.placeholder.com/100?text=Nikki2",
         "https://via.placeholder.com/100?text=Nikki3",
         "https://via.placeholder.com/100?text=Nikki4"
       ]
-    },
-     December: { 
-      name: ["James"], 
-      date: ["Dec 5"], 
-      next: ["Sean"],
-      gallery: [
-        "https://via.placeholder.com/100?text=James1",
-        "https://via.placeholder.com/100?text=James2",
-        "https://via.placeholder.com/100?text=James3",
-        "https://via.placeholder.com/100?text=James4"
-      ]
     }
-     };
-  
-  const now = new Date();
+  };
+
   const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const currentMonth = monthNames[now.getMonth()];
-  const nextMonth = monthNames[(now.getMonth() + 1) % 12];
+  const currentMonth = monthNames[new Date().getMonth()];
 
-  const currentData = birthdayData[currentMonth];
-  const nextData = birthdayData[nextMonth];
+  const data = birthdayData[currentMonth];
+  if(!data) return;
 
-  const displayCurrent = currentData && currentData.name.length ? currentData : nextData;
+  // Current celebrant
+  document.getElementById("celebrantNameText").textContent = data.name.join(", ");
+  document.getElementById("currentCelebrantDate").textContent = data.date.join(", ");
 
-  // Display names & dates
-  document.getElementById("celebrantNameText").textContent = displayCurrent.name.join(", ");
-  document.getElementById("currentCelebrantDate").textContent = displayCurrent.date.join(", ");
+  // Next celebrant
+  document.getElementById("nextCelebrantName").textContent = data.next.join(", ");
 
-  // Load gallery
-const galleryContainer = document.getElementById("celebrantGallery");
-galleryContainer.innerHTML = "";
-if(displayCurrent.gallery && displayCurrent.gallery.length){
-  displayCurrent.gallery.forEach(src => {
+  // Populate gallery
+  const galleryContainer = document.getElementById("celebrantGallery");
+  galleryContainer.innerHTML = "";
+  data.gallery.forEach(src => {
     const img = document.createElement("img");
     img.src = src;
     img.alt = "Celebrant Image";
-
-    // Add click listener inside the loop
-    img.addEventListener("click", () => {
+    img.onclick = () => {
       document.getElementById("celebrantFullscreenImg").src = src;
       document.getElementById("celebrantFullscreen").style.display = "flex";
-    });
-
+    };
     galleryContainer.appendChild(img);
   });
+
+  // Close fullscreen
+  document.getElementById("celebrantFullscreenClose").onclick = () => {
+    document.getElementById("celebrantFullscreen").style.display = "none";
+    document.getElementById("celebrantFullscreenImg").src = "";
+  };
+});
+
+// Separate gallery scroll for celebrant gallery
+let celebrantGalleryIndex = 0;
+function scrollGallery(direction) {
+  const gallery = document.getElementById("celebrantGallery");
+  const visible = 4; // 4 images visible
+  const total = gallery.children.length;
+
+  celebrantGalleryIndex += direction;
+  celebrantGalleryIndex = Math.max(0, Math.min(celebrantGalleryIndex, total - visible));
+
+  const imageWidth = gallery.children[0].offsetWidth + 6; // gap = 6px
+  gallery.style.transform = `translateX(-${celebrantGalleryIndex * imageWidth}px)`;
 }
 
-// Fullscreen close button
-const fsCloseBtn = document.getElementById("celebrantFullscreenClose");
-fsCloseBtn.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevent overlay click
-  document.getElementById("celebrantFullscreen").style.display = "none";
-  document.getElementById("celebrantFullscreenImg").src = "";
-});
-
-// Close when clicking outside the image
-const fsOverlay = document.getElementById("celebrantFullscreen");
-fsOverlay.addEventListener("click", () => {
-  fsOverlay.style.display = "none";
-  document.getElementById("celebrantFullscreenImg").src = "";
-});
+// Greet button placeholder
+function greetLink() { alert("Greet functionality can be implemented here!"); }
 </script>
-
 
 
 
