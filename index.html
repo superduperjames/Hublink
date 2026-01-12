@@ -1151,16 +1151,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // Add more months/events here
   };
 
-  // Get current month
-  const now = new Date();
-  const monthNames = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ];
-  const currentMonth = monthNames[now.getMonth()];
+// Get current month and year
+const now = new Date();
+const monthNames = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+const currentMonth = monthNames[now.getMonth()];
+const currentYear = now.getFullYear(); // <-- added year
 
-  // Update title
-  document.getElementById("eventsTitle").textContent = `Upcoming events for the month of ${currentMonth}`;
+// Update title
+document.getElementById("eventsTitle").textContent = 
+  `Upcoming events for the month of ${currentMonth} ${currentYear}`;
+
 
   // Populate events
   const eventsList = document.getElementById("eventsList");
