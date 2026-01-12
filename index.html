@@ -955,18 +955,16 @@ document.addEventListener("DOMContentLoaded", loadChecklist);
 </div>
 
   <script>
-function openFullscreen(src) {
-  const fullscreen = document.getElementById("celebrantFullscreen");
-  const img = document.getElementById("celebrantFullscreenImg");
-
+function openFullscreen(src, id="celebrantFullscreen") {
+  const fullscreen = document.getElementById(id);
+  const img = fullscreen.querySelector("img");
   img.src = src;
   fullscreen.style.display = "flex";
 }
 
-function closeFullscreen() {
-  const fullscreen = document.getElementById("celebrantFullscreen");
-  const img = document.getElementById("celebrantFullscreenImg");
-
+function closeFullscreen(id="celebrantFullscreen") {
+  const fullscreen = document.getElementById(id);
+  const img = fullscreen.querySelector("img");
   fullscreen.style.display = "none";
   img.src = "";
 }
@@ -1095,7 +1093,7 @@ document.addEventListener("DOMContentLoaded", function() {
     data.gallery.slice(start, start + pageSize).forEach(src => {
       const img = document.createElement("img");
       img.src = src;
-      img.onclick = () => openFullscreen(src);
+<img onclick="openFullscreen(this.src, 'celebrantFullscreen')">
       gallery.appendChild(img);
     });
   }
