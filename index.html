@@ -475,7 +475,6 @@ textarea {
   font-family: 'Montserrat', sans-serif;
 }
 
-
 /* Fullscreen */
 .fullscreen {
   display: none;
@@ -510,7 +509,6 @@ textarea {
   gap: 8px;
   margin-top: 12px;
 }
-
 .highlights-grid img {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -519,9 +517,58 @@ textarea {
   cursor: pointer;
   transition: transform 0.2s ease;
 }
-
 .highlights-grid img:hover {
   transform: scale(1.04);
+}
+
+
+    /* Card */
+.events-card {
+  background: #e9763d;
+  border-radius: 14px;
+  padding: 16px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+/* Event item container */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+/* Each event row */
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+/* Left: Big date number */
+.event-date {
+  font-size: 24px;
+  font-weight: 700;
+  width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+/* Right: Event details */
+.event-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+}
+.event-details .event-name {
+  font-weight: 600;
+}
+.event-details .event-time {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 2px;
 }
 
   </style>
@@ -668,10 +715,14 @@ textarea {
 </div>
 
 
-  <div class="card card-small">
-    <div class="card-title">New Image Box 2</div>
-    <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d" style="width:100%; border-radius:10px;">
+<div class="card card-small events-card">
+  <div class="card-title" id="eventsTitle">Upcoming events for the month of [Month]</div>
+
+  <div class="events-list" id="eventsList">
+    <!-- Event items will be dynamically inserted here -->
   </div>
+</div>
+
   
   <div class="card card-small">
     <div class="card-title">New Image Box 3</div>
@@ -1084,7 +1135,68 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  // Example events (editable)
+  const eventsData = {
+    "January": [
+      { day: 12, name: "Sean's Birthday", time: "All day" },
+      { day: 18, name: "Project Deadline", time: "2:00 PM" },
+      { day: 25, name: "Team Meeting", time: "10:00 AM" }
+    ],
+    "February": [
+      { day: 5, name: "Marketing Review", time: "1:00 PM" },
+      { day: 14, name: "Valentine's Lunch", time: "12:00 PM" }
+    ]
+    // Add more months/events here
+  };
 
+  // Get current month
+  const now = new Date();
+  const monthNames = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+  const currentMonth = monthNames[now.getMonth()];
+
+  // Update title
+  document.getElementById("eventsTitle").textContent = `Upcoming events for the month of ${currentMonth}`;
+
+  // Populate events
+  const eventsList = document.getElementById("eventsList");
+  eventsList.innerHTML = ""; // clear any old content
+
+  const monthEvents = eventsData[currentMonth] || [];
+
+  monthEvents.forEach(event => {
+    const eventItem = document.createElement("div");
+    eventItem.classList.add("event-item");
+
+    const eventDate = document.createElement("div");
+    eventDate.classList.add("event-date");
+    eventDate.textContent = event.day;
+
+    const eventDetails = document.createElement("div");
+    eventDetails.classList.add("event-details");
+
+    const eventName = document.createElement("div");
+    eventName.classList.add("event-name");
+    eventName.textContent = event.name;
+
+    const eventTime = document.createElement("div");
+    eventTime.classList.add("event-time");
+    eventTime.textContent = event.time;
+
+    eventDetails.appendChild(eventName);
+    eventDetails.appendChild(eventTime);
+
+    eventItem.appendChild(eventDate);
+    eventItem.appendChild(eventDetails);
+
+    eventsList.appendChild(eventItem);
+  });
+});
+</script>
   
 
 </body>
