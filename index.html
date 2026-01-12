@@ -868,52 +868,56 @@ document.addEventListener("DOMContentLoaded", loadChecklist);
 </script>
 
 <script>
-// Birthday data - multiple celebrants per month
-const birthdayData = {
-  January: { name: "James", date: "Jan 12", next: ["Nikki"] },
-  February: { name: "Nikki", date: "Feb 20", next: ["AJ", "Anjo"] },
-  March: { name: "AJ", date: "Mar 5", next: ["Celine"] },
-  April: { name: "Anjo", date: "Apr 18", next: ["Sean"] },
-  May: { name: "Celine", date: "May 25", next: ["Kath"] },
-  June: { name: "Sean", date: "Jun 30", next: ["Allen"] },
-  July: { name: "Kath", date: "Jul 14", next: ["Mika"] },
-  August: { name: "Allen", date: "Aug 9", next: ["Leo"] },
-  September: { name: "Mika", date: "Sep 3", next: ["Tina"] },
-  October: { name: "Leo", date: "Oct 21", next: ["Mark"] },
-  November: { name: "Tina", date: "Nov 7", next: ["James", "Nikki"] },
-  December: { name: "Mark", date: "Dec 15", next: ["AJ"] }
-};
+document.addEventListener("DOMContentLoaded", function() {
+  // Birthday data - multiple next month celebrants
+  const birthdayData = {
+    January: { name: "James", date: "Jan 12", next: ["Nikki"] },
+    February: { name: "Nikki", date: "Feb 20", next: ["AJ", "Anjo"] },
+    March: { name: "AJ", date: "Mar 5", next: ["Celine"] },
+    April: { name: "Anjo", date: "Apr 18", next: ["Sean"] },
+    May: { name: "Celine", date: "May 25", next: ["Kath"] },
+    June: { name: "Sean", date: "Jun 30", next: ["Allen"] },
+    July: { name: "Kath", date: "Jul 14", next: ["Mika"] },
+    August: { name: "Allen", date: "Aug 9", next: ["Leo"] },
+    September: { name: "Mika", date: "Sep 3", next: ["Tina"] },
+    October: { name: "Leo", date: "Oct 21", next: ["Mark"] },
+    November: { name: "Tina", date: "Nov 7", next: ["James", "Nikki"] },
+    December: { name: "Mark", date: "Dec 15", next: ["AJ"] }
+  };
 
-const now = new Date();
-const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const currentMonth = monthNames[now.getMonth()];
-const nextMonth = monthNames[(now.getMonth() + 1) % 12];
+  const now = new Date();
+  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const currentMonth = monthNames[now.getMonth()];
+  const nextMonth = monthNames[(now.getMonth() + 1) % 12];
 
-// Set current celebrant
-document.getElementById("celebrantNameText").textContent = birthdayData[currentMonth].name;
-document.getElementById("currentCelebrantDate").textContent = birthdayData[currentMonth].date;
+  const currentData = birthdayData[currentMonth];
+  const nextData = birthdayData[nextMonth];
 
-// Rotate through next month celebrants
-const nextCelebrants = birthdayData[nextMonth].next || [];
-let nextIndex = 0;
-const nextElem = document.getElementById("nextCelebrantName");
+  // If no current month celebrant, fallback to next month
+  let displayCurrent = currentData && currentData.name ? currentData : nextData;
 
-if(nextCelebrants.length > 0){
+  // Set current celebrant
+  document.getElementById("celebrantNameText").textContent = displayCurrent.name || "TBD";
+  document.getElementById("currentCelebrantDate").textContent = displayCurrent.date || "TBD";
+
+  // Rotate through next month celebrants
+  const nextCelebrants = nextData.next && nextData.next.length > 0 ? nextData.next : [nextData.name];
+  let nextIndex = 0;
+  const nextElem = document.getElementById("nextCelebrantName");
+
   nextElem.textContent = nextCelebrants[nextIndex];
 
   setInterval(() => {
     nextIndex = (nextIndex + 1) % nextCelebrants.length;
     nextElem.textContent = nextCelebrants[nextIndex];
   }, 3000); // change every 3 seconds
-} else {
-  nextElem.textContent = birthdayData[nextMonth].name || "";
-}
 
-// Greet button redirect
-function greetLink() {
-  const url = "https://example.com/greet"; // replace with your link
-  window.open(url, "_blank");
-}
+  // Greet button redirect
+  window.greetLink = function() {
+    const url = "https://example.com/greet"; // replace with your link
+    window.open(url, "_blank");
+  }
+});
 </script>
 
 
