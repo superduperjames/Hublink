@@ -890,8 +890,29 @@ document.addEventListener("DOMContentLoaded", loadChecklist);
 
 </div>
 
+  <script>
+function openFullscreen(src) {
+  const fullscreen = document.getElementById("celebrantFullscreen");
+  const img = document.getElementById("celebrantFullscreenImg");
+
+  img.src = src;
+  fullscreen.style.display = "flex";
+}
+
+function closeFullscreen() {
+  const fullscreen = document.getElementById("celebrantFullscreen");
+  const img = document.getElementById("celebrantFullscreenImg");
+
+  fullscreen.style.display = "none";
+  img.src = "";
+}
+</script>
+  
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    /* ======================
+     BIRTHDAY DATA
+  ====================== */
   const birthdayData = {
     January: { 
       name: ["Sean"], 
@@ -1006,31 +1027,30 @@ document.addEventListener("DOMContentLoaded", function() {
   function renderGallery() {
     gallery.innerHTML = "";
     const start = pageIndex * pageSize;
-    const end = start + pageSize;
 
-    data.gallery.slice(start, end).forEach(src => {
+    data.gallery.slice(start, start + pageSize).forEach(src => {
       const img = document.createElement("img");
       img.src = src;
-      img.alt = "Celebrant Image";
-
-      img.onclick = () => {
-        document.getElementById("celebrantFullscreenImg").src = src;
-        document.getElementById("celebrantFullscreen").style.display = "flex";
-      };
-
+      img.onclick = () => openFullscreen(src);
       gallery.appendChild(img);
     });
   }
 
-  prevArrow.onclick = () => {
-    pageIndex = (pageIndex - 1 + totalPages) % totalPages;
-    renderGallery();
-  };
+  if (data.gallery.length > pageSize) {
+    prevArrow.onclick = () => {
+      pageIndex = (pageIndex - 1 + totalPages) % totalPages;
+      renderGallery();
+    };
+    nextArrow.onclick = () => {
+      pageIndex = (pageIndex + 1) % totalPages;
+      renderGallery();
+    };
+  } else {
+    prevArrow.style.display = "none";
+    nextArrow.style.display = "none";
+  }
 
-  nextArrow.onclick = () => {
-    pageIndex = (pageIndex + 1) % totalPages;
-    renderGallery();
-  };
+  renderGallery();
 
   // Hide arrows if unnecessary
   if (data.gallery.length <= pageSize) {
@@ -1040,38 +1060,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
   renderGallery();
 
-  <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const fullscreen = document.getElementById("celebrantFullscreen");
-  const fullscreenImg = document.getElementById("celebrantFullscreenImg");
-  const closeBtn = document.getElementById("celebrantFullscreenClose");
-
-  // ======================
-  // OPEN FULLSCREEN (GLOBAL)
-  // ======================
-  window.openFullscreen = function (src) {
-    fullscreenImg.src = src;
-    fullscreen.style.display = "flex";
-  };
-
-  // ======================
-  // CLOSE FULLSCREEN
-  // ======================
-  function closeFullscreen() {
-    fullscreen.style.display = "none";
-    fullscreenImg.src = "";
-  }
-
-  // Close via X button
-  closeBtn.onclick = (e) => {
+    /* ======================
+     FULLSCREEN CLOSE
+  ====================== */
+  document.getElementById("celebrantFullscreenClose").onclick = (e) => {
     e.stopPropagation();
     closeFullscreen();
   };
 
-  // Close by clicking background
-  fullscreen.onclick = () => {
+  document.getElementById("celebrantFullscreen").onclick = () => {
     closeFullscreen();
   };
+
 });
 </script>
 
