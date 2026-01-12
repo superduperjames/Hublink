@@ -278,6 +278,59 @@ textarea {
 
     /* FAQ button */
     .faq-btn { padding: 10px 16px; font-size: 14px; border-radius: 8px; border: none; background: #a8cdf0; color: #fff; cursor: pointer; margin-top: 10px; }
+
+    /* Wedding checklist */
+.wedding-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.progress-text {
+  font-weight: 600;
+}
+
+.toggle-link,
+.checklist-actions a {
+  font-size: 13px;
+  color: #1a202c;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.checklist-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.5);
+  transition: background 0.25s ease, opacity 0.25s ease;
+}
+
+.checklist-item.done {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.checklist-item input {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
   </style>
 </head>
 
@@ -354,11 +407,28 @@ textarea {
 </div>
 
 
-  <!-- Third Card: Wedding Checklist -->
-  <div class="card card-medium">
-    <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
-    <div class="package-content" style="text-align:center;">(Coming soon)</div>
+<!-- Third Card: Wedding Checklist -->
+<div class="card card-medium wedding-card">
+  <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
+
+  <div class="checklist-header">
+    <div class="progress-text">
+      <span id="progressCount">0</span>/<span id="totalCount">0</span> completed
+    </div>
+    <a href="#" class="toggle-link" onclick="toggleChecklist(event)">
+      Collapse checklist
+    </a>
   </div>
+
+  <div class="checklist-body" id="checklistBody">
+    <!-- Items injected from Google Sheets -->
+  </div>
+
+  <div class="checklist-actions">
+    <a href="#" onclick="downloadChecklistPDF(event)">Download as PDF</a>
+  </div>
+</div>
+
 
   <!-- Additional small cards -->
   <div class="card card-small">
@@ -517,6 +587,71 @@ textarea {
     const imageWidth = track.children[0].offsetWidth + 8;
     track.style.transform = `translateX(-${galleryIndex * imageWidth}px)`;
   }
+</script>
+
+  <script>
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbz3u3OgbkWEcqOKIeXz-dXvi-RlEKOkB8wkRHgZKVQdSHZsvjsN9cQsEvNNiJ_xWGEwlg/exec";
+let checklistData = [];
+
+fetch(SHEET_ENDPOINT)
+  .then(res => res.json())
+  .then(data => {
+    checklistData = data;
+    renderChecklist();
+  });
+
+function renderChecklist() {
+  const container = document.getElementById("checklistBody");
+  container.innerHTML = "";
+
+  let completed = 0;
+
+  checklistData.forEach((row, index) => {
+    const done = row[2] === true;
+    if (done) completed++;
+
+    const item = document.createElement("div");
+    item.className = "checklist-item" + (done ? " done" : "");
+
+    item.innerHTML = `
+      <input type="checkbox" ${done ? "checked" : ""}
+        onchange="toggleItem(${index}, this.checked)">
+      <span>${row[1]}</span>
+    `;
+
+    container.appendChild(item);
+  });
+
+  document.getElementById("progressCount").textContent = completed;
+  document.getElementById("totalCount").textContent = checklistData.length;
+}
+
+function toggleItem(index, checked) {
+  checklistData[index][2] = checked;
+
+  fetch(SHEET_ENDPOINT, {
+    method: "POST",
+    body: JSON.stringify({
+      row: index + 2,
+      completed: checked
+    })
+  });
+
+  renderChecklist();
+}
+
+function toggleChecklist(e) {
+  e.preventDefault();
+  const body = document.getElementById("checklistBody");
+  body.style.display = body.style.display === "none" ? "flex" : "none";
+  e.target.textContent =
+    body.style.display === "none" ? "Expand checklist" : "Collapse checklist";
+}
+
+function downloadChecklistPDF(e) {
+  e.preventDefault();
+  window.print();
+}
 </script>
 
 </body>
