@@ -721,6 +721,7 @@ textarea {
   text-align: center;
   max-width: 300px;
   margin: 0 auto;
+  padding: 16px;
 }
 
 /* Name display */
@@ -737,7 +738,6 @@ textarea {
   justify-content: center;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
-
 .image-box-3 .randomizer-result.shuffling {
   transform: scale(1.04);
   opacity: 0.85;
@@ -754,12 +754,8 @@ textarea {
   filter: grayscale(100%);
   opacity: 0;
   transform: scale(0.92);
-  transition:
-    opacity 0.5s ease,
-    transform 0.5s ease,
-    filter 0.4s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease, filter 0.4s ease;
 }
-
 .image-box-3 .randomizer-photo.revealed {
   display: block;
   opacity: 1;
@@ -780,10 +776,7 @@ textarea {
   font-weight: 600;
   cursor: pointer;
 }
-
-.image-box-3 .randomizer-btn:active {
-  transform: scale(0.98);
-}
+.image-box-3 .randomizer-btn:active { transform: scale(0.98); }
 
 .image-box-3 .randomizer-reset-btn {
   width: 100%;
@@ -796,10 +789,7 @@ textarea {
   font-weight: 600;
   cursor: pointer;
 }
-
-.image-box-3 .randomizer-reset-btn:active {
-  transform: scale(0.97);
-}
+.image-box-3 .randomizer-reset-btn:active { transform: scale(0.97); }
 
 /* Confetti */
 .confetti-container {
@@ -808,7 +798,6 @@ textarea {
   pointer-events: none;
   z-index: 9999;
 }
-
 .confetti-piece {
   position: absolute;
   top: -10px;
@@ -818,13 +807,22 @@ textarea {
   background: hsl(210, 70%, 60%);
   animation: confetti-fall 1.8s ease-out forwards;
 }
-
 @keyframes confetti-fall {
   to {
     transform: translateY(110vh) rotate(240deg);
     opacity: 0;
   }
 }
+
+/* Mobile spacing tweak */
+@media screen and (max-width: 480px) {
+  .image-box-3 { padding: 24px 16px; margin: 20px auto; }
+  .image-box-3 .randomizer-result { font-size: 24px; min-height: 60px; margin: 20px 0; padding: 18px; }
+  .image-box-3 .randomizer-photo { width: 140px; height: 140px; margin: 16px auto 0; }
+  .image-box-3 .randomizer-btn,
+  .image-box-3 .randomizer-reset-btn { padding: 16px; font-size: 15px; }
+}
+
 
 
 
@@ -1000,14 +998,15 @@ textarea {
     alt=""
   />
 
-  <button class="randomizer-btn" id="pickBtn">
-    Pick a Random Name
+  <button class="randomizer-btn" onclick="chooseNextName()">
+    Choose Next Name
   </button>
 
-  <button class="randomizer-reset-btn" id="resetBtn">
-    Reset Selection
+  <button class="randomizer-reset-btn" onclick="resetAllNames()">
+    Reset
   </button>
 </div>
+
 
 
   <!-- Monthly Highlights Gallery ----------------------------------------------->
@@ -1497,6 +1496,7 @@ document.getElementById("eventsTitle").textContent =
 const STORAGE_KEY = "randomizer_state";
 const RANDOMIZER_PASSWORD = "random123";
 
+/* Names + Photos */
 const ALL_PEOPLE = [
   { name: "James", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230648/Jamespic_leg9kt.png" },
   { name: "Nikki", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230608/Nikkipic_xilqer.png" },
@@ -1509,137 +1509,104 @@ const ALL_PEOPLE = [
 ];
 
 /* ===== Persistence Functions ===== */
-function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return raw ? JSON.parse(raw) : null;
-}
-function clearState() {
-  localStorage.removeItem(STORAGE_KEY);
-}
+function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function loadState() { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }
+function clearState() { localStorage.removeItem(STORAGE_KEY); }
 
 /* ===== Variables ===== */
 let remainingPeople = [...ALL_PEOPLE];
 let lastPicked = null;
-let isLocked = false;
 let isShuffling = false;
 
+/* ===== DOM Elements ===== */
+const nameEl = document.getElementById("randomizerResult");
+const photoEl = document.getElementById("randomizerPhoto");
+
+/* ===== Restore state on page load ===== */
 document.addEventListener("DOMContentLoaded", () => {
-  const nameEl = document.getElementById("randomizerResult");
-  const photoEl = document.getElementById("randomizerPhoto");
-  const pickBtn = document.getElementById("pickBtn");
-  const resetBtn = document.getElementById("resetBtn");
-
-  /* ===== Restore state ===== */
   const saved = loadState();
-  if (saved) {
-    remainingPeople = saved.remainingPeople;
-    lastPicked = saved.lastPicked;
-    isLocked = saved.isLocked;
+  if (!saved) return;
 
-    if (lastPicked) {
-      showResult(lastPicked, false, true);
-    }
-  }
+  remainingPeople = saved.remainingPeople;
+  lastPicked = saved.lastPicked;
 
-  /* ===== Trigger Randomizer ===== */
-  pickBtn.addEventListener("click", () => {
-    if (isShuffling || isLocked) return;
-
-    const password = prompt("Enter password to continue:");
-    if (password !== RANDOMIZER_PASSWORD) {
-      alert("Incorrect password.");
-      return;
-    }
-
-    if (remainingPeople.length === 0) {
-      alert("All names have already been picked.");
-      return;
-    }
-
-    isShuffling = true;
-    nameEl.classList.add("shuffling");
-    photoEl.classList.remove("revealed");
-    photoEl.style.display = "none";
-
-    const shuffleInterval = setInterval(() => {
-      const temp = remainingPeople[Math.floor(Math.random() * remainingPeople.length)];
-      nameEl.textContent = temp.name;
-      photoEl.src = temp.photo;
-    }, 120);
-
-    setTimeout(() => {
-      clearInterval(shuffleInterval);
-
-      const index = Math.floor(Math.random() * remainingPeople.length);
-      const chosen = remainingPeople.splice(index, 1)[0];
-
-      lastPicked = chosen;
-      isLocked = true;
-
-      showResult(chosen, true, false);
-
-      saveState({
-        remainingPeople,
-        lastPicked,
-        isLocked
-      });
-
-      isShuffling = false;
-    }, 2000);
-  });
-
-  /* ===== Reset Randomizer ===== */
-  resetBtn.addEventListener("click", () => {
-    const password = prompt("Enter password to reset:");
-    if (password !== RANDOMIZER_PASSWORD) {
-      alert("Incorrect password.");
-      return;
-    }
-
-    remainingPeople = [...ALL_PEOPLE];
-    lastPicked = null;
-    isLocked = false;
-    clearState();
-
-    nameEl.textContent = "Tap to unlock & pick";
-    photoEl.src = "";
-    photoEl.alt = "";
-    photoEl.classList.remove("revealed");
-    photoEl.classList.add("grayscale");
-  });
-
-  /* ===== Show Result Function ===== */
-  function showResult(person, celebrate = true, restore = false) {
-    nameEl.textContent = person.name;
-    photoEl.src = person.photo;
-    photoEl.alt = person.name;
-    photoEl.classList.remove("grayscale");
-    photoEl.classList.add("revealed");
-    photoEl.style.display = "block";
-
-    if (celebrate && !restore) fireConfetti();
-  }
-
-  /* ===== Confetti ===== */
-  function fireConfetti() {
-    const container = document.createElement("div");
-    container.className = "confetti-container";
-
-    for (let i = 0; i < 18; i++) {
-      const piece = document.createElement("span");
-      piece.className = "confetti-piece";
-      piece.style.left = Math.random() * 100 + "%";
-      piece.style.animationDelay = Math.random() * 0.4 + "s";
-      container.appendChild(piece);
-    }
-
-    document.body.appendChild(container);
-    setTimeout(() => container.remove(), 2000);
-  }
+  if (lastPicked) showResult(lastPicked, false, true); // restore only
 });
+
+/* ===== Choose Next Name ===== */
+function chooseNextName() {
+  if (isShuffling) return;
+
+  const password = prompt("Enter password to continue:");
+  if (password !== RANDOMIZER_PASSWORD) { alert("Incorrect password."); return; }
+  if (remainingPeople.length === 0) { alert("All names have been picked."); return; }
+
+  isShuffling = true;
+  nameEl.classList.add("shuffling");
+  photoEl.classList.remove("revealed");
+  photoEl.style.display = "none";
+
+  /* Shuffle animation */
+  const shuffleInterval = setInterval(() => {
+    const temp = remainingPeople[Math.floor(Math.random() * remainingPeople.length)];
+    nameEl.textContent = temp.name;
+    photoEl.src = temp.photo;
+  }, 120);
+
+  setTimeout(() => {
+    clearInterval(shuffleInterval);
+
+    const index = Math.floor(Math.random() * remainingPeople.length);
+    const chosen = remainingPeople.splice(index, 1)[0];
+    lastPicked = chosen;
+
+    showResult(chosen, true, false);
+    saveState({ remainingPeople, lastPicked });
+    isShuffling = false;
+  }, 2000);
+}
+
+/* ===== Show Result ===== */
+function showResult(person, celebrate = true, restore = false) {
+  nameEl.textContent = person.name;
+  photoEl.src = person.photo;
+  photoEl.alt = person.name;
+  photoEl.classList.remove("grayscale");
+  photoEl.classList.add("revealed");
+  photoEl.style.display = "block";
+  if (celebrate && !restore) fireConfetti();
+}
+
+/* ===== Reset All Names ===== */
+function resetAllNames() {
+  const password = prompt("Enter password to reset:");
+  if (password !== RANDOMIZER_PASSWORD) { alert("Incorrect password."); return; }
+
+  remainingPeople = [...ALL_PEOPLE];
+  lastPicked = null;
+  clearState();
+
+  nameEl.textContent = "Tap to unlock & pick";
+  photoEl.src = "";
+  photoEl.alt = "";
+  photoEl.classList.remove("revealed");
+  photoEl.classList.add("grayscale");
+}
+
+/* ===== Confetti ===== */
+function fireConfetti() {
+  const container = document.createElement("div");
+  container.className = "confetti-container";
+  for (let i = 0; i < 18; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random() * 100 + "%";
+    piece.style.animationDelay = Math.random() * 0.4 + "s";
+    container.appendChild(piece);
+  }
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), 2000);
+}
 </script>
 
 
