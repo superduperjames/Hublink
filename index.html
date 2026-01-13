@@ -538,12 +538,13 @@ textarea {
    Gallery Card Styling - Responsive
 ========================================= */
 .gallery-card {
-  background: #ABE188;      /* Card color */
+  background: #ABE188;
   border-radius: 14px;
-  padding: 12px;
+  padding: 10px;
   color: #fff;
-  max-width: 480px;         /* Max width of card */
-  margin: 0 auto;           /* Center card */
+  width: 100%;
+  max-width: 720px;   /* Desktop-friendly for 2x4 */
+  margin: 0 auto;
 }
 
 /* Card title */
@@ -557,10 +558,11 @@ textarea {
 /* Highlights grid */
 .highlights-grid {
   display: grid;
-  gap: 8px;                             /* Gaps between images */
-  margin-top: 12px;
-  grid-auto-rows: 1fr;                  /* Keep images square */
+  grid-template-columns: repeat(4, 1fr); /* 4 across */
+  grid-template-rows: repeat(2, 1fr);    /* 2 down */
+  gap: 6px;
 }
+
 
 /* Images */
 .highlights-grid img {
@@ -649,18 +651,16 @@ textarea {
 }
 
 /* Desktop: 2 rows × 4 columns */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .highlights-grid {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
-    grid-template-rows: repeat(2, 1fr);    /* 2 rows */
-    gap: 8px;
-    height: calc((100% / 2) * 2);          /* Ensures grid accommodates 2 rows */
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
   .gallery-card {
-    max-width: 980px;
+    max-width: 480px;
     padding: 14px;
   }
 
