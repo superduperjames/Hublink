@@ -215,6 +215,73 @@ textarea {
     /* FAQ button */
     .faq-btn { padding: 10px 16px; font-size: 14px; border-radius: 8px; border: none; background: #a8cdf0; color: #fff; cursor: pointer; margin-top: 10px; }
 
+    /* =============================
+   Health & Wellness - Mobile Fix
+   Only affects screens <= 480px
+============================= */
+@media screen and (max-width: 480px) {
+  .wellness-card {
+    padding: 16px;
+  }
+
+  /* Stack image and content vertically */
+  .package-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .package-image {
+    width: 140px;
+    height: 120px;
+    margin: 0 auto;
+  }
+
+  .package-content {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+    width: 100%;
+  }
+
+  .current-month-holder {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .current-month-holder .highlight-month {
+    font-weight: 700;
+  }
+
+  .month-holder-name {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .wellness-bottom-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .upload-or-btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px 0;
+  }
+
+  .or-info {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .or-info ul {
+    padding-left: 16px;
+  }
+}
+
+    
 /* Wedding Checklist Card ------------------------------*/
 .wedding-card {
   font-family: 'Montserrat', sans-serif;
