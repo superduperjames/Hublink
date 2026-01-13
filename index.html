@@ -538,10 +538,12 @@ textarea {
 .gallery-card {
   background: #ABE188;
   border-radius: 14px;
-  padding: 16px;
+  padding: 12px;
   color: #fff;
-  font-family: 'Montserrat', sans-serif;
   position: relative;
+  font-size:14pt;
+  max-width:280px;
+  margin:0 auto;
 }
 
 /* Gallery container + arrows */
@@ -555,10 +557,10 @@ textarea {
   background: rgba(0,0,0,0.4);
   color: #fff;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   z-index: 10;
 }
@@ -570,16 +572,17 @@ textarea {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 12px;
+  gap: 6px;
+  margin-top: 10px;
 }
 .highlights-grid img {
-  width: 100%;
+  width: 90%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  margin: 0 auto;
 }
 .highlights-grid img:hover {
   transform: scale(1.04);
@@ -615,6 +618,7 @@ textarea {
   .highlights-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
+    gap: 5px;
   }
   .gallery-arrow {
     width: 28px;
