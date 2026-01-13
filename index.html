@@ -1012,16 +1012,8 @@ textarea {
     Reset Selection
   </button>
 </div>
-<div class="randomizer-card">
-  <div class="avatar-wrapper">
-    <img id="randomizerAvatar" class="avatar grayscale" />
-  </div>
 
-  <div id="randomizerResult" class="randomizer-name">—</div>
 
-  <button onclick="triggerRandomizer()">Pick Random Name</button>
-  <button class="reset-btn" onclick="resetRandomizer()">Reset Selection</button>
-</div>
 
   
 
@@ -1506,23 +1498,11 @@ document.getElementById("eventsTitle").textContent =
    PASSWORD-LOCKED RANDOMIZER
    Name + Photo • No repeats
    Shuffle • Fade • Reset
+   Persistent
 ================================ */
-const STORAGE_KEY = "randomizer_state";
 
-function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  return raw ? JSON.parse(raw) : null;
-}
-
-function clearState() {
-  localStorage.removeItem(STORAGE_KEY);
-}
-   
 const RANDOMIZER_PASSWORD = "random123";
+const STORAGE_KEY = "randomizer_state";
 
 /* 👇 Names + photos */
 const ALL_PEOPLE = [
@@ -1536,116 +1516,49 @@ const ALL_PEOPLE = [
   { name: "Kath", photo: "images/kath.jpg" }
 ];
 
-
-let remainingEntries = [...ALL_ENTRIES];
-let isShuffling = false;
-
-function triggerRandomizer() {
-  if (isShuffling) return;
-
-  const password = prompt("Enter password to continue:");
-  if (password !== RANDOMIZER_PASSWORD) {
-    alert("Incorrect password.");
-    return;
-  }
-
-  if (remainingEntries.length === 0) {
-    alert("All names have already been picked.");
-    return;
-  }
-
-  isShuffling = true;
-
-  const resultEl = document.getElementById("randomizerResult");
-  const photoEl = document.getElementById("randomizerPhoto");
-
-  resultEl.classList.add("shuffling");
-  photoEl.classList.remove("revealed");
-  photoEl.style.display = "none";
-
-  /* Shuffle animation */
-  const shuffleInterval = setInterval(() => {
-    const temp =
-      remainingEntries[Math.floor(Math.random() * remainingEntries.length)];
-    resultEl.textContent = temp.name;
-  }, 120);
-
-  setTimeout(() => {
-    clearInterval(shuffleInterval);
-
-    const index = Math.floor(Math.random() * remainingEntries.length);
-    const chosen = remainingEntries.splice(index, 1)[0];
-
-    resultEl.textContent = chosen.name;
-    resultEl.classList.remove("shuffling");
-
-    photoEl.src = chosen.photo;
-    photoEl.alt = chosen.name;
-    photoEl.style.display = "block";
-
-    requestAnimationFrame(() => {
-      photoEl.classList.add("revealed");
-    });
-
-    fireConfetti();
-    isShuffling = false;
-  }, 2000);
-}
-
-/* Reset everything */
-function resetRandomizer() {
-  const password = prompt("Enter password to reset:");
-  if (password !== RANDOMIZER_PASSWORD) {
-    alert("Incorrect password.");
-    return;
-  }
-
-  remainingEntries = [...ALL_ENTRIES];
-
-  const resultEl = document.getElementById("randomizerResult");
-  const photoEl = document.getElementById("randomizerPhoto");
-
-  resultEl.textContent = "Tap to unlock & pick";
-  photoEl.classList.remove("revealed");
-  photoEl.style.display = "none";
-}
-
-/* Confetti */
-function fireConfetti() {
-  const container = document.createElement("div");
-  container.className = "confetti-container";
-
-  for (let i = 0; i < 18; i++) {
-    const piece = document.createElement("span");
-    piece.className = "confetti-piece";
-    piece.style.left = Math.random() * 100 + "%";
-    piece.style.animationDelay = Math.random() * 0.4 + "s";
-    container.appendChild(piece);
-  }
-
-  document.body.appendChild(container);
-
-  setTimeout(() => container.remove(), 2000);
-}
-   let remainingPeople = [...ALL_PEOPLE];
+let remainingPeople = [...ALL_PEOPLE];
 let lastPicked = null;
-let isLocked = false;
 let isShuffling = false;
 
+/* -------------------------------
+   Persistence helpers
+-------------------------------- */
+function saveState() {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ remainingPeople, lastPicked })
+  );
+}
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+function clearState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+/* -------------------------------
+   Restore on refresh
+-------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
   const saved = loadState();
   if (!saved) return;
 
   remainingPeople = saved.remainingPeople;
   lastPicked = saved.lastPicked;
-  isLocked = saved.isLocked;
 
   if (lastPicked) {
-    showResult(lastPicked, false); // no confetti on restore
+    showResult(lastPicked, false);
   }
 });
+
+/* -------------------------------
+   Main randomizer
+-------------------------------- */
 function triggerRandomizer() {
-  if (isShuffling || isLocked) return;
+  if (isShuffling) return;
 
   const password = prompt("Enter password to continue:");
   if (password !== RANDOMIZER_PASSWORD) {
@@ -1661,50 +1574,46 @@ function triggerRandomizer() {
   isShuffling = true;
 
   const nameEl = document.getElementById("randomizerResult");
-  const avatarEl = document.getElementById("randomizerAvatar");
+  const photoEl = document.getElementById("randomizerPhoto");
 
   nameEl.classList.add("shuffling");
+  photoEl.classList.remove("revealed");
+  photoEl.style.visibility = "hidden";
 
   const shuffleInterval = setInterval(() => {
     const temp =
       remainingPeople[Math.floor(Math.random() * remainingPeople.length)];
     nameEl.textContent = temp.name;
-    avatarEl.src = temp.photo;
   }, 120);
 
   setTimeout(() => {
     clearInterval(shuffleInterval);
-    nameEl.classList.remove("shuffling");
 
     const index = Math.floor(Math.random() * remainingPeople.length);
     const chosen = remainingPeople.splice(index, 1)[0];
-
     lastPicked = chosen;
-    isLocked = true;
 
-    showResult(chosen, true);
+    nameEl.textContent = chosen.name;
+    nameEl.classList.remove("shuffling");
 
-    saveState({
-      remainingPeople,
-      lastPicked,
-      isLocked
+    photoEl.src = chosen.photo;
+    photoEl.alt = chosen.name;
+    photoEl.style.visibility = "visible";
+
+    requestAnimationFrame(() => {
+      photoEl.classList.add("revealed");
     });
+
+    fireConfetti();
+    saveState();
 
     isShuffling = false;
   }, 2000);
 }
-function showResult(person, celebrate = true) {
-  const nameEl = document.getElementById("randomizerResult");
-  const avatarEl = document.getElementById("randomizerAvatar");
 
-  nameEl.textContent = person.name;
-
-  avatarEl.src = person.photo;
-  avatarEl.classList.remove("grayscale");
-  avatarEl.classList.add("reveal");
-
-  if (celebrate) fireConfetti();
-}
+/* -------------------------------
+   Reset
+-------------------------------- */
 function resetRandomizer() {
   const password = prompt("Enter password to reset:");
   if (password !== RANDOMIZER_PASSWORD) {
@@ -1714,20 +1623,37 @@ function resetRandomizer() {
 
   remainingPeople = [...ALL_PEOPLE];
   lastPicked = null;
-  isLocked = false;
-
   clearState();
 
   const nameEl = document.getElementById("randomizerResult");
-  const avatarEl = document.getElementById("randomizerAvatar");
+  const photoEl = document.getElementById("randomizerPhoto");
 
-  nameEl.textContent = "—";
-  avatarEl.src = "";
-  avatarEl.classList.add("grayscale");
-  avatarEl.classList.remove("reveal");
+  nameEl.textContent = "Tap to unlock & pick";
+  photoEl.classList.remove("revealed");
+  photoEl.style.visibility = "hidden";
+  photoEl.src = "";
 }
 
+/* -------------------------------
+   Confetti
+-------------------------------- */
+function fireConfetti() {
+  const container = document.createElement("div");
+  container.className = "confetti-container";
+
+  for (let i = 0; i < 18; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random() * 100 + "%";
+    piece.style.animationDelay = Math.random() * 0.4 + "s";
+    container.appendChild(piece);
+  }
+
+  document.body.appendChild(container);
+  setTimeout(() => container.remove(), 2000);
+}
 </script>
+
 
 
 
