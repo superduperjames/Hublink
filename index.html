@@ -719,6 +719,8 @@ textarea {
 ========================================= */
 .image-box-3 {
   text-align: center;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 /* Name display */
@@ -727,7 +729,7 @@ textarea {
   padding: 14px;
   border-radius: 12px;
   background: rgba(0,0,0,0.08);
-  font-size: 40px;
+  font-size: 20px;
   font-weight: 700;
   min-height: 52px;
   display: flex;
@@ -741,9 +743,7 @@ textarea {
   opacity: 0.85;
 }
 
-/* =========================================
-   RANDOMIZER PHOTO
-========================================= */
+/* Photo styling */
 .image-box-3 .randomizer-photo {
   width: 120px;
   height: 120px;
@@ -751,11 +751,9 @@ textarea {
   border-radius: 50%;
   object-fit: cover;
   display: none;
-
   filter: grayscale(100%);
   opacity: 0;
   transform: scale(0.92);
-
   transition:
     opacity 0.5s ease,
     transform 0.5s ease,
@@ -769,9 +767,7 @@ textarea {
   filter: grayscale(0%);
 }
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* Buttons */
 .image-box-3 .randomizer-btn {
   width: 100%;
   margin-top: 14px;
@@ -792,8 +788,11 @@ textarea {
 .image-box-3 .randomizer-reset-btn {
   width: 100%;
   margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.2);
   background: transparent;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -802,9 +801,7 @@ textarea {
   transform: scale(0.97);
 }
 
-/* =========================================
-   CONFETTI
-========================================= */
+/* Confetti */
 .confetti-container {
   position: fixed;
   inset: 0;
@@ -831,7 +828,6 @@ textarea {
 
 
 
-
     
   </style>
 </head>
@@ -839,7 +835,7 @@ textarea {
 <body>
 
 <div class="card-grid">
-  <!-- First Card: Payment Gateway -->
+  <!-- First Card: Payment Gateway --------------------------------------------------------->
   <div class="card card-large">
     <div class="card-title">Interactive Payment Gateway</div>
     <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230154/Screenshot_2026-01-10_at_7.33.42_PM_diuowv.png" class="hero-image" onclick="openFullscreen(this.src)">
@@ -865,7 +861,7 @@ textarea {
     </div>
   </div>
 
-<!-- Second Card: Health + Wellness -->
+<!-- Second Card: Health + Wellness ----------------------------------------------->
 <div class="card card-medium wellness-card">
   <div class="card-title">Health + Wellness Package</div>
 
@@ -909,7 +905,7 @@ textarea {
 </div>
 
 
-<!-- Third Card: Wedding Checklist -->
+<!-- Third Card: Wedding Checklist ------------------------------------------>
 <div class="wedding-card">
   <div class="card-title">Anjo & Kath Wedding Essentials Checklist</div>
 
@@ -936,7 +932,7 @@ textarea {
 
 
 
-  <!-- Additional small cards ------------------------>
+  <!-- Birthday Card ----------------------------------------------->
   
 <!-- HTML -->
 <div class="card card-small birthday-card">
@@ -959,7 +955,6 @@ textarea {
     </div>
     <button class="gallery-arrow" id="nextGallery">&gt;</button>
   </div>
-
   <!-- Greet Button -->
   <div class="celebrant-action">
     <button id="greetButton">Greet them here!</button>
@@ -969,13 +964,15 @@ textarea {
     Up next: <span id="nextCelebrantName">[Next Name]</span>
   </div>
 </div>
-
 <!-- Fullscreen overlay -->
 <div class="fullscreen" id="celebrantFullscreen">
   <div class="fullscreen-close" id="celebrantFullscreenClose">×</div>
   <img id="celebrantFullscreenImg">
 </div>
 
+
+  
+    <!-- Upcoming Events Card ----------------------------------------------->
 
 <div class="card card-small events-card">
   <div class="card-title" id="eventsTitle">Upcoming events for the month of [Month]</div>
@@ -986,6 +983,8 @@ textarea {
 </div>
 
   
+
+    <!-- Randomizer Pick Name ----------------------------------------------->
   
 <div class="card card-small image-box-3">
   <div class="card-title">Random Name Picker</div>
@@ -996,7 +995,7 @@ textarea {
 
   <img
     id="randomizerPhoto"
-    class="randomizer-photo"
+    class="randomizer-photo grayscale"
     src=""
     alt=""
   />
@@ -1011,8 +1010,7 @@ textarea {
 </div>
 
 
-
-  
+  <!-- Monthly Highlights Gallery ----------------------------------------------->
 
   
 <div class="card card-small gallery-card">
@@ -1490,18 +1488,16 @@ document.getElementById("eventsTitle").textContent =
 });
 </script>
 
- <script>
+<script>
 /* ===============================
    PASSWORD-LOCKED RANDOMIZER
    Name + Photo • No repeats
-   Shuffle • Fade • Reset
-   Persistent
+   Shuffle • Fade • Reset • Persistence
 ================================ */
-
-const RANDOMIZER_PASSWORD = "random123";
 const STORAGE_KEY = "randomizer_state";
+const RANDOMIZER_PASSWORD = "random123";
 
-/* 👇 Names + photos */
+/* Names + Photos */
 const ALL_PEOPLE = [
   { name: "James", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230648/Jamespic_leg9kt.png" },
   { name: "Nikki", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230608/Nikkipic_xilqer.png" },
@@ -1513,18 +1509,9 @@ const ALL_PEOPLE = [
   { name: "Kath", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230640/Kathpic_a9e5bt.png" }
 ];
 
-let remainingPeople = [...ALL_PEOPLE];
-let lastPicked = null;
-let isShuffling = false;
-
-/* -------------------------------
-   Persistence helpers
--------------------------------- */
-function saveState() {
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({ remainingPeople, lastPicked })
-  );
+/* ===== Persistence Functions ===== */
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function loadState() {
@@ -1536,26 +1523,33 @@ function clearState() {
   localStorage.removeItem(STORAGE_KEY);
 }
 
-/* -------------------------------
-   Restore on refresh
--------------------------------- */
+/* ===== Variables ===== */
+let remainingPeople = [...ALL_PEOPLE];
+let lastPicked = null;
+let isLocked = false;
+let isShuffling = false;
+
+/* ===== DOM Elements ===== */
+const nameEl = document.getElementById("randomizerResult");
+const photoEl = document.getElementById("randomizerPhoto");
+
+/* ===== Restore state on page load ===== */
 document.addEventListener("DOMContentLoaded", () => {
   const saved = loadState();
   if (!saved) return;
 
   remainingPeople = saved.remainingPeople;
   lastPicked = saved.lastPicked;
+  isLocked = saved.isLocked;
 
   if (lastPicked) {
-    showResult(lastPicked, false);
+    showResult(lastPicked, false, true); // restore only
   }
 });
 
-/* -------------------------------
-   Main randomizer
--------------------------------- */
+/* ===== Trigger Randomizer ===== */
 function triggerRandomizer() {
-  if (isShuffling) return;
+  if (isShuffling || isLocked) return;
 
   const password = prompt("Enter password to continue:");
   if (password !== RANDOMIZER_PASSWORD) {
@@ -1569,18 +1563,15 @@ function triggerRandomizer() {
   }
 
   isShuffling = true;
-
-  const nameEl = document.getElementById("randomizerResult");
-  const photoEl = document.getElementById("randomizerPhoto");
-
   nameEl.classList.add("shuffling");
   photoEl.classList.remove("revealed");
-  photoEl.style.visibility = "hidden";
+  photoEl.style.display = "none";
 
+  /* Shuffle animation for 2 seconds */
   const shuffleInterval = setInterval(() => {
-    const temp =
-      remainingPeople[Math.floor(Math.random() * remainingPeople.length)];
+    const temp = remainingPeople[Math.floor(Math.random() * remainingPeople.length)];
     nameEl.textContent = temp.name;
+    photoEl.src = temp.photo;
   }, 120);
 
   setTimeout(() => {
@@ -1588,29 +1579,36 @@ function triggerRandomizer() {
 
     const index = Math.floor(Math.random() * remainingPeople.length);
     const chosen = remainingPeople.splice(index, 1)[0];
+
     lastPicked = chosen;
+    isLocked = true;
 
-    nameEl.textContent = chosen.name;
-    nameEl.classList.remove("shuffling");
+    showResult(chosen, true, false);
 
-    photoEl.src = chosen.photo;
-    photoEl.alt = chosen.name;
-    photoEl.style.visibility = "visible";
-
-    requestAnimationFrame(() => {
-      photoEl.classList.add("revealed");
+    saveState({
+      remainingPeople,
+      lastPicked,
+      isLocked
     });
-
-    fireConfetti();
-    saveState();
 
     isShuffling = false;
   }, 2000);
 }
 
-/* -------------------------------
-   Reset
--------------------------------- */
+/* ===== Show Result ===== */
+function showResult(person, celebrate = true, restore = false) {
+  nameEl.textContent = person.name;
+
+  photoEl.src = person.photo;
+  photoEl.alt = person.name;
+  photoEl.classList.remove("grayscale");
+  photoEl.classList.add("revealed");
+  photoEl.style.display = "block";
+
+  if (celebrate && !restore) fireConfetti();
+}
+
+/* ===== Reset Randomizer ===== */
 function resetRandomizer() {
   const password = prompt("Enter password to reset:");
   if (password !== RANDOMIZER_PASSWORD) {
@@ -1620,20 +1618,17 @@ function resetRandomizer() {
 
   remainingPeople = [...ALL_PEOPLE];
   lastPicked = null;
+  isLocked = false;
   clearState();
 
-  const nameEl = document.getElementById("randomizerResult");
-  const photoEl = document.getElementById("randomizerPhoto");
-
   nameEl.textContent = "Tap to unlock & pick";
-  photoEl.classList.remove("revealed");
-  photoEl.style.visibility = "hidden";
   photoEl.src = "";
+  photoEl.alt = "";
+  photoEl.classList.remove("revealed");
+  photoEl.classList.add("grayscale");
 }
 
-/* -------------------------------
-   Confetti
--------------------------------- */
+/* ===== Confetti ===== */
 function fireConfetti() {
   const container = document.createElement("div");
   container.className = "confetti-container";
