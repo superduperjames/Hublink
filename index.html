@@ -727,7 +727,7 @@ textarea {
   padding: 14px;
   border-radius: 12px;
   background: rgba(0,0,0,0.08);
-  font-size: 20px;
+  font-size: 40px;
   font-weight: 700;
   min-height: 52px;
   display: flex;
@@ -792,11 +792,8 @@ textarea {
 .image-box-3 .randomizer-reset-btn {
   width: 100%;
   margin-top: 10px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0.2);
   background: transparent;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1506,14 +1503,14 @@ const STORAGE_KEY = "randomizer_state";
 
 /* 👇 Names + photos */
 const ALL_PEOPLE = [
-  { name: "James", photo: "images/james.jpg" },
-  { name: "Nikki", photo: "images/nikki.jpg" },
-  { name: "AJ", photo: "images/aj.jpg" },
-  { name: "Anjo", photo: "images/anjo.jpg" },
-  { name: "Celine", photo: "images/celine.jpg" },
-  { name: "Sean", photo: "images/sean.jpg" },
-  { name: "Allen", photo: "images/allen.jpg" },
-  { name: "Kath", photo: "images/kath.jpg" }
+  { name: "James", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230648/Jamespic_leg9kt.png" },
+  { name: "Nikki", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230608/Nikkipic_xilqer.png" },
+  { name: "AJ", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230609/AJpic_fyrj9l.png" },
+  { name: "Anjo", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230610/Anjopic_yjsced.png" },
+  { name: "Celine", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230610/Celinepic_cbysfw.png" },
+  { name: "Sean", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768244706/Seansean_cgicbz.png" },
+  { name: "Allen", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230608/Allenpic_pkk0zo.png" },
+  { name: "Kath", photo: "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230640/Kathpic_a9e5bt.png" }
 ];
 
 let remainingPeople = [...ALL_PEOPLE];
