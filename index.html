@@ -1348,12 +1348,12 @@ function closeFullscreen() {
 </script>
   
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    /* ======================
+document.addEventListener("DOMContentLoaded", function() {   
+  /* ======================
      BIRTHDAY DATA
   ====================== */
   const birthdayData = {
-        January: { 
+    January: { 
       name: ["Sean"], 
       date: ["Jan 28"], 
       next: ["Anjo", "Allen"],
@@ -1429,21 +1429,39 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-    const monthNames = [
+  const monthNames = [
     "January","February","March","April","May","June",
     "July","August","September","October","November","December"
   ];
 
-  const currentMonth = monthNames[new Date().getMonth()];
-  const data = birthdayData[currentMonth];
-  if (!data) return;
+  // Returns next month with birthday starting from startIndex
+  function getNextAvailableMonth(startIndex) {
+    for (let i = 0; i < 12; i++) {
+      const idx = (startIndex + i) % 12;
+      const month = monthNames[idx];
+      if (birthdayData[month] && birthdayData[month].name.length > 0) return month;
+    }
+    return null;
+  }
 
   // ======================
-  // TEXT
+  // CURRENT CELEBRANT
   // ======================
+  const currentMonthIndex = new Date().getMonth();
+  const displayMonth = getNextAvailableMonth(currentMonthIndex);
+  const data = birthdayData[displayMonth];
+  if (!data) return;
+
   document.getElementById("celebrantNameText").textContent = data.name.join(", ");
   document.getElementById("currentCelebrantDate").textContent = data.date.join(", ");
-  document.getElementById("nextCelebrantName").textContent = data.next.join(", ");
+
+  // ======================
+  // NEXT CELEBRANT
+  // ======================
+  const nextMonthIndex = monthNames.indexOf(displayMonth) + 1;
+  const nextMonth = getNextAvailableMonth(nextMonthIndex);
+  const nextData = birthdayData[nextMonth];
+  document.getElementById("nextCelebrantName").textContent = nextData ? nextData.name.join(", ") : "";
 
   // ======================
   // GREET BUTTON
@@ -1491,17 +1509,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
   renderGallery();
 
-  // Hide arrows if unnecessary
-  if (data.gallery.length <= pageSize) {
-    prevArrow.style.display = "none";
-    nextArrow.style.display = "none";
-  }
-
-  renderGallery();
-
-    /* ======================
-     FULLSCREEN CLOSE
-  ====================== */
+  // ======================
+  // FULLSCREEN CLOSE
+  // ======================
   document.getElementById("celebrantFullscreenClose").onclick = (e) => {
     e.stopPropagation();
     closeFullscreen();
@@ -1510,9 +1520,9 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("celebrantFullscreen").onclick = () => {
     closeFullscreen();
   };
-
 });
 </script>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
